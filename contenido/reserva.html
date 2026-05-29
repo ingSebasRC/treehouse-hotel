@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Completar reserva — Treehouse1959</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../estilos/style.css" />
+	
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <meta name="theme-color" content="#ffffff">
+	
+  <style>
+    body { background: var(--crema); }
+
+    /* ── Header ── */
+    .res-header {
+      background: var(--verde-profundo);
+      padding: 1.2rem 2.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky; top: 0; z-index: 100;
+    }
+    .res-logo { font-family: 'Playfair Display', serif; font-size: 1.3rem; color: var(--blanco); text-decoration: none; }
+    .res-logo span { color: var(--dorado-claro); font-style: italic; }
+    .res-volver { display: flex; align-items: center; gap: 0.5rem; color: rgba(255,255,255,0.7); text-decoration: none; font-size: 0.85rem; transition: color 0.2s; }
+    .res-volver:hover { color: var(--dorado-claro); }
+
+    /* ── Layout principal ── */
+    .res-main {
+      max-width: 1060px;
+      margin: 0 auto;
+      padding: 2.5rem 2rem;
+      display: grid;
+      grid-template-columns: 1fr 360px;
+      gap: 2.5rem;
+      align-items: start;
+    }
+
+    /* ── Resumen lateral ── */
+    .res-resumen {
+      background: var(--verde-profundo);
+      border-radius: 1.2rem;
+      overflow: hidden;
+      position: sticky;
+      top: 80px;
+    }
+    .res-resumen-img { height: 180px; overflow: hidden; }
+    .res-resumen-img img { width: 100%; height: 100%; object-fit: cover; }
+    .res-resumen-body { padding: 1.5rem; }
+    .res-resumen-tag {
+      display: inline-block;
+      background: rgba(201,168,76,0.2);
+      border: 1px solid rgba(201,168,76,0.35);
+      color: var(--dorado-claro);
+      font-size: 0.68rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.25rem 0.7rem;
+      border-radius: 2rem;
+      margin-bottom: 0.7rem;
+    }
+    .res-resumen-nombre { font-family: 'Playfair Display', serif; font-size: 1.15rem; color: var(--blanco); margin-bottom: 1.2rem; }
+    .res-resumen-fila {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.6rem 0;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      font-size: 0.85rem;
+    }
+    .res-resumen-fila:last-child { border-bottom: none; }
+    .res-resumen-fila .lbl { color: rgba(255,255,255,0.5); }
+    .res-resumen-fila .val { color: var(--blanco); font-weight: 500; }
+    .res-resumen-noches {
+      margin-top: 1rem;
+      background: rgba(201,168,76,0.12);
+      border-radius: 0.7rem;
+      padding: 0.8rem 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .res-resumen-noches .lbl { color: var(--dorado-claro); font-size: 0.82rem; }
+    .res-resumen-noches .val { font-family: 'Playfair Display', serif; font-size: 1.3rem; color: var(--dorado-claro); }
+
+    /* ── Formulario ── */
+    .res-form-wrap { display: flex; flex-direction: column; gap: 1.8rem; }
+
+    .res-seccion {
+      background: var(--blanco);
+      border-radius: 1.2rem;
+      padding: 2rem;
+      box-shadow: 0 2px 16px rgba(26,58,42,0.06);
+    }
+    .res-seccion-titulo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.15rem;
+      color: var(--verde-profundo);
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.8rem;
+      border-bottom: 2px solid var(--arena);
+    }
+
+    /* Campos del formulario */
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .form-grid.col-1 { grid-template-columns: 1fr; }
+
+    .campo { display: flex; flex-direction: column; gap: 0.35rem; }
+    .campo label {
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: var(--verde-profundo);
+      letter-spacing: 0.03em;
+    }
+    .campo label .req { color: #c0392b; margin-left: 2px; }
+    .campo input,
+    .campo select,
+    .campo textarea {
+      border: 1.5px solid rgba(26,58,42,0.15);
+      border-radius: 0.55rem;
+      padding: 0.7rem 0.95rem;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      color: var(--texto-oscuro);
+      background: var(--crema);
+      outline: none;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .campo input:focus,
+    .campo select:focus,
+    .campo textarea:focus {
+      border-color: var(--verde-selva);
+      background: var(--blanco);
+    }
+    .campo input.error { border-color: #e74c3c; }
+    .campo .msg-error { font-size: 0.72rem; color: #e74c3c; display: none; }
+    .campo input.error ~ .msg-error { display: block; }
+    .campo textarea { resize: vertical; min-height: 80px; }
+
+    /* Checkbox y radio */
+    .campo-check {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.7rem;
+      font-size: 0.85rem;
+      color: var(--texto-medio);
+      line-height: 1.5;
+      cursor: pointer;
+    }
+    .campo-check input[type="checkbox"] {
+      width: 18px; height: 18px;
+      accent-color: var(--verde-profundo);
+      flex-shrink: 0;
+      margin-top: 2px;
+      cursor: pointer;
+    }
+
+    .radio-grupo {
+      display: flex;
+      gap: 1.5rem;
+      margin-top: 0.3rem;
+    }
+    .radio-op {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.88rem;
+      color: var(--texto-medio);
+      cursor: pointer;
+    }
+    .radio-op input[type="radio"] {
+      accent-color: var(--verde-profundo);
+      width: 16px; height: 16px;
+    }
+
+    /* Método de pago */
+    .pago-opciones { display: flex; flex-direction: column; gap: 1rem; margin-bottom: 1.5rem; }
+    .pago-op {
+      border: 1.5px solid rgba(26,58,42,0.15);
+      border-radius: 0.8rem;
+      padding: 1rem 1.2rem;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .pago-op.seleccionado { border-color: var(--verde-selva); background: rgba(61,122,82,0.04); }
+    .pago-op-header { display: flex; align-items: center; gap: 0.8rem; }
+    .pago-op-header input[type="radio"] { accent-color: var(--verde-profundo); width: 16px; height: 16px; }
+    .pago-op-titulo { font-weight: 500; color: var(--verde-profundo); font-size: 0.9rem; }
+    .pago-op-desc { font-size: 0.78rem; color: var(--texto-medio); margin-top: 0.4rem; line-height: 1.5; padding-left: 1.7rem; }
+
+    /* Campos de tarjeta */
+    #camposTarjeta { display: none; }
+    #camposTarjeta.visible { display: block; }
+
+    /* Botón enviar */
+    .res-btn-enviar {
+      width: 100%;
+      background: var(--verde-profundo);
+      color: var(--blanco);
+      border: none;
+      padding: 1rem;
+      border-radius: 0.7rem;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.2s;
+      margin-top: 0.5rem;
+    }
+    .res-btn-enviar:hover { background: var(--verde-musgo); transform: translateY(-1px); }
+    .res-btn-enviar:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+    /* Nota de seguridad */
+    .res-seguridad {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.75rem;
+      color: var(--texto-medio);
+      justify-content: center;
+      margin-top: 0.8rem;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 860px) {
+      .res-main { grid-template-columns: 1fr; }
+      .res-resumen { position: static; order: -1; }
+      .res-resumen-img { height: 140px; }
+    }
+    @media (max-width: 540px) {
+      .form-grid { grid-template-columns: 1fr; }
+      .res-main { padding: 1.5rem 1rem; }
+      .res-header { padding: 1rem 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Header -->
+<header class="res-header">
+  <a href="index.html" class="res-logo">Treehouse<span>1959</span></a>
+  <a id="btnVolver" href="disponibilidad.html" class="res-volver">← Volver a habitaciones</a>
+</header>
+
+<main class="res-main">
+
+  <!-- Columna izquierda: formulario -->
+  <div class="res-form-wrap">
+
+    <!-- Sección: Datos del huésped -->
+    <div class="res-seccion">
+      <h2 class="res-seccion-titulo">Datos del huésped</h2>
+      <div style="display:flex; flex-direction:column; gap:1rem;">
+        <div class="form-grid">
+          <div class="campo">
+            <label>Nombre <span class="req">*</span></label>
+            <input type="text" id="fNombre" placeholder="Juan" />
+            <span class="msg-error">Campo obligatorio</span>
+          </div>
+          <div class="campo">
+            <label>Apellidos <span class="req">*</span></label>
+            <input type="text" id="fApellidos" placeholder="García López" />
+            <span class="msg-error">Campo obligatorio</span>
+          </div>
+        </div>
+        <div class="form-grid">
+          <div class="campo">
+            <label>Correo electrónico <span class="req">*</span></label>
+            <input type="email" id="fEmail" placeholder="juan@correo.com" />
+            <span class="msg-error">Ingresa un correo válido</span>
+          </div>
+          <div class="campo">
+            <label>Confirma email <span class="req">*</span></label>
+            <input type="email" id="fEmailConfirm" placeholder="juan@correo.com" />
+            <span class="msg-error">Los correos no coinciden</span>
+          </div>
+        </div>
+        <div class="form-grid">
+          <div class="campo">
+            <label>Tipo de documento <span class="req">*</span></label>
+            <select id="fDocTipo">
+              <option value="CC">Cédula de Ciudadanía</option>
+              <option value="CE">Cédula de Extranjería</option>
+              <option value="Pasaporte">Pasaporte</option>
+              <option value="NIT">NIT</option>
+            </select>
+          </div>
+          <div class="campo">
+            <label>Número de documento <span class="req">*</span></label>
+            <input type="text" id="fDocNum" placeholder="12345678" />
+            <span class="msg-error">Campo obligatorio</span>
+          </div>
+        </div>
+        <div class="form-grid">
+          <div class="campo">
+            <label>Nacionalidad <span class="req">*</span></label>
+            <input type="text" id="fNacionalidad" placeholder="Colombiana" />
+            <span class="msg-error">Campo obligatorio</span>
+          </div>
+          <div class="campo">
+            <label>Profesión / Ocupación</label>
+            <input type="text" id="fProfesion" placeholder="Ingeniero" />
+          </div>
+        </div>
+        <div class="form-grid">
+          <div class="campo">
+            <label>Empresa</label>
+            <input type="text" id="fEmpresa" placeholder="Nombre de la empresa" />
+          </div>
+          <div class="campo">
+            <label>Placa del vehículo</label>
+            <input type="text" id="fPlaca" placeholder="ABC-123" />
+          </div>
+        </div>
+        <div class="form-grid">
+          <div class="campo">
+            <label>País <span class="req">*</span></label>
+            <select id="fPais">
+              <option value="">Seleccionar país</option>
+              <option value="CO" selected>Colombia</option>
+              <option value="VE">Venezuela</option>
+              <option value="EC">Ecuador</option>
+              <option value="PE">Perú</option>
+              <option value="MX">México</option>
+              <option value="AR">Argentina</option>
+              <option value="CL">Chile</option>
+              <option value="BR">Brasil</option>
+              <option value="US">Estados Unidos</option>
+              <option value="ES">España</option>
+              <option value="otro">Otro</option>
+            </select>
+            <span class="msg-error">Selecciona un país</span>
+          </div>
+          <div class="campo">
+            <label>Ciudad</label>
+            <input type="text" id="fCiudad" placeholder="Bogotá" />
+          </div>
+        </div>
+        <div class="form-grid col-1">
+          <div class="campo">
+            <label>Nombres de acompañantes</label>
+            <textarea id="fAcompanantes" placeholder="Nombre completo de las personas que se hospedarán con usted..."></textarea>
+          </div>
+        </div>
+        <div class="form-grid">
+          <div class="campo">
+            <label>Teléfono móvil <span class="req">*</span></label>
+            <input type="tel" id="fTelefono" placeholder="+57 300 000 0000" />
+            <span class="msg-error">Campo obligatorio</span>
+          </div>
+          <div></div>
+        </div>
+        <div class="campo form-grid col-1">
+          <label>Comentario</label>
+          <textarea id="fComentario" placeholder="Peticiones especiales, hora de llegada estimada..."></textarea>
+        </div>
+        <label class="campo-check">
+          <input type="checkbox" id="fInfoComercial" />
+          Quiero recibir información comercial y ofertas especiales del hotel
+        </label>
+        <div class="campo">
+          <label>¿Has estado anteriormente en este establecimiento?</label>
+          <div class="radio-grupo">
+            <label class="radio-op">
+              <input type="radio" name="estancia" value="no" checked /> No
+            </label>
+            <label class="radio-op">
+              <input type="radio" name="estancia" value="si" /> Sí
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sección: Método de pago -->
+    <div class="res-seccion">
+      <h2 class="res-seccion-titulo">Método de pago</h2>
+
+      <div class="pago-opciones">
+        <div class="pago-op seleccionado" id="opHotel" onclick="seleccionarPago('hotel')">
+          <div class="pago-op-header">
+            <input type="radio" name="pago" value="hotel" id="radioHotel" checked />
+            <span class="pago-op-titulo">Pago en el hotel</span>
+          </div>
+          <p class="pago-op-desc">El establecimiento cargará el 100% de la primera noche al menos 2 días antes de la llegada.</p>
+        </div>
+        <div class="pago-op" id="opPrepago" onclick="seleccionarPago('prepago')">
+          <div class="pago-op-header">
+            <input type="radio" name="pago" value="prepago" id="radioPrepago" />
+            <span class="pago-op-titulo">Prepago</span>
+          </div>
+          <p class="pago-op-desc">El hotel te cargará el importe de la reserva antes de la entrada al hotel.</p>
+        </div>
+      </div>
+
+      <!-- Campos de tarjeta (solo visibles con prepago) -->
+      <div id="camposTarjeta">
+        <div style="display:flex; flex-direction:column; gap:1rem;">
+          <div class="form-grid col-1">
+            <div class="campo">
+              <label>Titular de la tarjeta <span class="req">*</span></label>
+              <input type="text" id="fTitular" placeholder="Como aparece en la tarjeta" />
+              <span class="msg-error">Campo obligatorio</span>
+            </div>
+          </div>
+          <div class="form-grid col-1">
+            <div class="campo">
+              <label>Número de la tarjeta <span class="req">*</span></label>
+              <input type="text" id="fNumTarjeta" placeholder="0000 0000 0000 0000" maxlength="19" />
+              <span class="msg-error">Número inválido</span>
+            </div>
+          </div>
+          <div class="form-grid">
+            <div class="campo">
+              <label>Mes de caducidad</label>
+              <select id="fMes">
+                <option value="">Mes</option>
+                <option value="01">01</option><option value="02">02</option>
+                <option value="03">03</option><option value="04">04</option>
+                <option value="05">05</option><option value="06">06</option>
+                <option value="07">07</option><option value="08">08</option>
+                <option value="09">09</option><option value="10">10</option>
+                <option value="11">11</option><option value="12">12</option>
+              </select>
+            </div>
+            <div class="campo">
+              <label>Año de caducidad</label>
+              <select id="fAnio">
+                <option value="">Año</option>
+                <option>2026</option><option>2027</option><option>2028</option>
+                <option>2029</option><option>2030</option><option>2031</option>
+                <option>2032</option><option>2033</option><option>2034</option>
+                <option>2035</option><option>2036</option><option>2037</option>
+                <option>2038</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-grid">
+            <div class="campo">
+              <label>CVC <span class="req">*</span></label>
+              <input type="text" id="fCVC" placeholder="123" maxlength="4" />
+              <span class="msg-error">Campo obligatorio</span>
+            </div>
+            <div></div>
+          </div>
+        </div>
+      </div>
+
+      <button class="res-btn-enviar" id="btnEnviar">Confirmar reserva</button>
+      <div class="res-seguridad">🔒 Tus datos están protegidos con cifrado SSL</div>
+    </div>
+
+  </div>
+
+  <!-- Columna derecha: resumen de la reserva -->
+  <aside class="res-resumen" id="resumenLateral">
+    <!-- Se rellena con JS -->
+  </aside>
+
+</main>
+
+<script>
+  // ── Leer parámetros de la URL ──────────────
+  const params   = new URLSearchParams(window.location.search);
+  const checkin  = params.get('checkin');
+  const checkout = params.get('checkout');
+  const adultos  = params.get('adultos') || '2';
+  const ninos    = params.get('ninos')   || '0';
+  const habId    = params.get('hab')     || '1';
+  const habNombre = decodeURIComponent(params.get('nombre') || 'Habitación');
+
+  // ── Helpers ────────────────────────────────
+  function formatearBonito(isoStr) {
+    const MESES = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+    const d = new Date(isoStr + 'T12:00:00');
+    return d.getDate() + ' ' + MESES[d.getMonth()] + ' ' + d.getFullYear();
+  }
+  function calcNoches(ci, co) {
+    return Math.round((new Date(co) - new Date(ci)) / (1000 * 60 * 60 * 24));
+  }
+
+  // ── Render resumen lateral ─────────────────
+  async function renderResumen() {
+    const noches = checkin && checkout ? calcNoches(checkin, checkout) : '—';
+    let personas = adultos + (adultos === '1' ? ' adulto' : ' adultos');
+    if (ninos !== '0') personas += ', ' + ninos + (ninos === '1' ? ' niño' : ' niños');
+
+    // Función para obtener la imagen local según el nombre
+    function obtenerImagenLocal(nombre) {
+      const n = nombre.toLowerCase();
+      if (n.includes('doble') && !n.includes('semi')) return '../imagenes/habitaciones/Doble.jpeg';
+      if (n.includes('semidoble')) return '../imagenes/habitaciones/Semidoble.jpeg';
+      if (n.includes('especial'))  return '../imagenes/habitaciones/Queen-especial.jpeg';
+      if (n.includes('queen'))     return '../imagenes/habitaciones/Queen.jpeg';
+      if (n.includes('suite') || n.includes('delux')) return '../imagenes/habitaciones/Delux.jpeg';
+      if (n.includes('familiar'))  return '../imagenes/habitaciones/Familiar.jpeg';
+      return '../imagenes/habitaciones/Doble.jpeg';
+    }
+
+    let imagenSrc = obtenerImagenLocal(habNombre);
+    let precioTexto = '';
+    try {
+      const res  = await fetch('/api/habitaciones');
+      const data = await res.json();
+      const hab  = (data.data || []).find(h => String(h.id) === String(habId));
+      if (hab) {
+        // Priorizamos el mapeo por nombre para usar tus nuevas imágenes
+        imagenSrc = obtenerImagenLocal(hab.nombre);
+        const totalPersonas = parseInt(adultos) + parseInt(ninos);
+        const valor = totalPersonas <= 1 ? hab.valor_1p : hab.valor_2p;
+        if (valor) precioTexto = `$${Number(valor).toLocaleString('es-CO')} / noche`;
+      }
+    } catch(e) { /* usa imagen por nombre detectada arriba */ }
+
+    document.getElementById('resumenLateral').innerHTML = `
+      <div class="res-resumen-img">
+        <img src="${imagenSrc}" alt="${habNombre}" />
+      </div>
+      <div class="res-resumen-body">
+        <span class="res-resumen-tag">Treehouse1959 · 4★</span>
+        <div class="res-resumen-nombre">${habNombre}</div>
+        <div class="res-resumen-fila">
+          <span class="lbl">Check-in</span>
+          <span class="val">${checkin ? formatearBonito(checkin) : '—'}</span>
+        </div>
+        <div class="res-resumen-fila">
+          <span class="lbl">Check-out</span>
+          <span class="val">${checkout ? formatearBonito(checkout) : '—'}</span>
+        </div>
+        <div class="res-resumen-fila">
+          <span class="lbl">Huéspedes</span>
+          <span class="val">${personas}</span>
+        </div>
+        ${precioTexto ? `<div class="res-resumen-fila"><span class="lbl">Precio</span><span class="val">${precioTexto}</span></div>` : ''}
+        <div class="res-resumen-noches">
+          <span class="lbl">🌙 Estancia</span>
+          <span class="val">${noches} ${noches === 1 ? 'noche' : 'noches'}</span>
+        </div>
+      </div>
+    `;
+  }
+
+  // ── Método de pago ─────────────────────────
+  function seleccionarPago(tipo) {
+    document.getElementById('opHotel').classList.toggle('seleccionado',   tipo === 'hotel');
+    document.getElementById('opPrepago').classList.toggle('seleccionado', tipo === 'prepago');
+    document.getElementById('radioHotel').checked   = tipo === 'hotel';
+    document.getElementById('radioPrepago').checked = tipo === 'prepago';
+    const campos = document.getElementById('camposTarjeta');
+    campos.classList.toggle('visible', tipo === 'prepago');
+  }
+
+  // Formato de número de tarjeta (grupos de 4)
+  document.getElementById('fNumTarjeta').addEventListener('input', function () {
+    let val = this.value.replace(/\D/g, '').substring(0, 16);
+    this.value = val.replace(/(.{4})/g, '$1 ').trim();
+  });
+
+  // ── Validación y envío ─────────────────────
+  document.getElementById('btnEnviar').addEventListener('click', async () => {
+    let valido = true;
+
+    function validarCampo(id, condicion) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      if (!condicion(el.value)) {
+        el.classList.add('error');
+        valido = false;
+      } else {
+        el.classList.remove('error');
+      }
+    }
+
+    validarCampo('fNombre',       v => v.trim().length > 0);
+    validarCampo('fApellidos',    v => v.trim().length > 0);
+    validarCampo('fDocNum',       v => v.trim().length > 0);
+    validarCampo('fNacionalidad', v => v.trim().length > 0);
+    validarCampo('fEmail',        v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v));
+    validarCampo('fEmailConfirm', v => v === document.getElementById('fEmail').value && v.length > 0);
+    validarCampo('fPais',         v => v !== '');
+    validarCampo('fTelefono',     v => v.trim().length > 0);
+
+    const esPrepago = document.getElementById('radioPrepago').checked;
+    if (esPrepago) {
+      validarCampo('fTitular',    v => v.trim().length > 0);
+      validarCampo('fNumTarjeta', v => v.replace(/\s/g,'').length === 16);
+      validarCampo('fCVC',        v => v.length >= 3);
+    }
+
+    if (!valido) {
+      const primerError = document.querySelector('input.error, select.error');
+      if (primerError) primerError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+
+    // ── Armar el objeto con todos los datos ───
+    const noches = checkin && checkout
+      ? Math.round((new Date(checkout) - new Date(checkin)) / (1000 * 60 * 60 * 24))
+      : 1;
+
+    const estanciaPrevia = document.querySelector('input[name="estancia"]:checked').value === 'si';
+
+    const datos = {
+      // Huésped
+      nombre:          document.getElementById('fNombre').value.trim(),
+      apellidos:       document.getElementById('fApellidos').value.trim(),
+      documento_tipo:  document.getElementById('fDocTipo').value,
+      documento_num:   document.getElementById('fDocNum').value.trim(),
+      nacionalidad:    document.getElementById('fNacionalidad').value.trim(),
+      profesion:       document.getElementById('fProfesion').value.trim(),
+      empresa:         document.getElementById('fEmpresa').value.trim(),
+      placa_vehiculo:  document.getElementById('fPlaca').value.trim(),
+      email:           document.getElementById('fEmail').value.trim(),
+      pais:            document.getElementById('fPais').value,
+      ciudad:          document.getElementById('fCiudad').value.trim(),
+      telefono:        document.getElementById('fTelefono').value.trim(),
+      info_comercial:  document.getElementById('fInfoComercial').checked,
+      estancia_previa: estanciaPrevia,
+      acompanantes_nombres: document.getElementById('fAcompanantes').value.trim(),
+      comentario:      document.getElementById('fComentario').value.trim(),
+      // Reserva
+      habitacion_id:   habId,
+      fecha_checkin:   checkin,
+      fecha_checkout:  checkout,
+      num_adultos:     adultos,
+      num_ninos:       ninos,
+      num_noches:      noches,
+      metodo_pago:     esPrepago ? 'prepago' : 'hotel',
+      // Tarjeta (solo si prepago)
+      titular:         esPrepago ? document.getElementById('fTitular').value.trim()    : '',
+      num_tarjeta:     esPrepago ? document.getElementById('fNumTarjeta').value        : '',
+      mes_caducidad:   esPrepago ? document.getElementById('fMes').value               : '',
+      anio_caducidad:  esPrepago ? document.getElementById('fAnio').value              : '',
+    };
+
+    // ── Enviar al servidor Node.js ─────────────
+    const btn = document.getElementById('btnEnviar');
+    btn.disabled    = true;
+    btn.textContent = 'Procesando...';
+
+    try {
+      // 1. Guardar reserva y generar PDF
+      const respuesta = await fetch('/api/reserva/pdf', {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify(datos)
+      });
+
+      if (respuesta.ok) {
+        // 2. Obtener ID de los headers
+        const reservaId = respuesta.headers.get('X-Reserva-Id') || '—';
+
+        // 3. Descargar el PDF generado
+        const blob = await respuesta.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `Registro_${datos.nombre}_${datos.apellidos}.pdf`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+
+        // 4. Redirigir a página de confirmación limpia
+        window.location.href = 'confirmacion.html';
+      } else {
+        const error = await respuesta.json();
+        alert('⚠️ ' + (error.mensaje || 'Error al procesar la reserva'));
+        btn.disabled    = false;
+        btn.textContent = 'Confirmar reserva';
+      }
+
+    } catch (error) {
+      alert('❌ No se pudo conectar con el servidor.\n¿Está corriendo Node.js?');
+      btn.disabled    = false;
+      btn.textContent = 'Confirmar reserva';
+    }
+  });
+
+  // ── Actualizar enlace volver con los params ─
+  document.getElementById('btnVolver').href =
+    'disponibilidad.html?checkin=' + (checkin||'') + '&checkout=' + (checkout||'') +
+    '&adultos=' + adultos + '&ninos=' + ninos;
+
+  // Render inicial
+  renderResumen();
+</script>
+</body>
+</html>

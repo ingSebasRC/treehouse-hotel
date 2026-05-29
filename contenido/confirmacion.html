@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Reserva confirmada — Treehouse1959</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../estilos/style.css" />
+  <style>
+    body { background: var(--crema); min-height: 100vh; display: flex; flex-direction: column; }
+
+    .conf-header {
+      background: var(--verde-profundo);
+      padding: 1.2rem 2.5rem;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .conf-logo { font-family: 'Playfair Display', serif; font-size: 1.3rem; color: var(--blanco); text-decoration: none; }
+    .conf-logo span { color: var(--dorado-claro); font-style: italic; }
+
+    .conf-main {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 1.5rem;
+    }
+    .conf-card {
+      background: var(--blanco);
+      border-radius: 1.5rem;
+      padding: 3rem 2.5rem;
+      max-width: 520px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 8px 40px rgba(26,58,42,0.1);
+    }
+    .conf-icono {
+      width: 72px; height: 72px;
+      background: linear-gradient(135deg, var(--verde-musgo), var(--verde-selva));
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2rem;
+      margin: 0 auto 1.5rem;
+    }
+    .conf-titulo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem;
+      color: var(--verde-profundo);
+      margin-bottom: 0.5rem;
+    }
+    .conf-titulo em { font-style: italic; color: var(--tierra); }
+    .conf-subtitulo {
+      color: var(--texto-medio);
+      font-size: 0.95rem;
+      line-height: 1.7;
+      font-weight: 300;
+      margin-bottom: 2rem;
+    }
+    .conf-btn {
+      display: inline-block;
+      background: var(--verde-profundo);
+      color: var(--blanco);
+      text-decoration: none;
+      padding: 0.85rem 2rem;
+      border-radius: 2rem;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: background 0.2s;
+    }
+    .conf-btn:hover { background: var(--verde-musgo); }
+  </style>
+</head>
+<body>
+
+<header class="conf-header">
+  <a href="index.html" class="conf-logo">Treehouse<span>1959</span></a>
+</header>
+
+<main class="conf-main">
+  <div class="conf-card">
+    <div class="conf-icono">✅</div>
+    <h1 class="conf-titulo">¡Reserva <em>confirmada</em>!</h1>
+    <p class="conf-subtitulo">
+      Tu reserva ha sido recibida con éxito. Te hemos enviado un correo con los detalles y tu tarjeta de registro se ha descargado automáticamente.
+    </p>
+    <a href="index.html" class="conf-btn">Volver al inicio</a>
+  </div>
+</main>
+
+</body>
+</html>

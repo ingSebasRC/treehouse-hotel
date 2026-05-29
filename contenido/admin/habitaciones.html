@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Habitaciones — Admin Treehouse1959</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet" />
+
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <meta name="theme-color" content="#ffffff">
+	
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --verde-profundo: #1a3a2a;
+      --verde-musgo:    #2d5a3d;
+      --verde-selva:    #3d7a52;
+      --tierra:         #8b6242;
+      --arena:          #f0e8d8;
+      --crema:          #faf7f2;
+      --dorado:         #c9a84c;
+      --dorado-claro:   #e8c97a;
+      --blanco:         #ffffff;
+      --texto-oscuro:   #1c2b20;
+      --texto-medio:    #4a5e50;
+      --sidebar-w:      260px;
+      --apple-bg:       #f5f5f7;
+      --apple-card:     rgba(255, 255, 255, 0.8);
+      --apple-radius:   20px;
+    }
+    body { 
+      font-family: 'DM Sans', -apple-system, sans-serif; 
+      background: var(--apple-bg); 
+      color: var(--texto-oscuro); 
+      display: flex; 
+      min-height: 100vh;
+    }
+
+    /* ── SIDEBAR (Modern Apple Style - Dark Version) ── */
+    .sidebar {
+      width: var(--sidebar-w);
+      background: var(--verde-profundo);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      top: 0; left: 0; bottom: 0;
+      z-index: 50;
+    }
+    .sidebar-logo {
+      padding: 2.5rem 1.8rem 1.5rem;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .sidebar-logo h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      color: var(--blanco);
+      font-weight: 700;
+    }
+    .sidebar-logo h2 span { color: var(--dorado); font-style: italic; }
+    .sidebar-logo p { 
+      font-size: 0.65rem; 
+      color: rgba(255,255,255,0.4); 
+      text-transform: uppercase; 
+      letter-spacing: 0.15em; 
+      margin-top: 0.4rem;
+      font-weight: 600;
+    }
+
+    .sidebar-nav { flex: 1; padding: 1.5rem 0.8rem; }
+    .nav-seccion {
+      font-size: 0.7rem;
+      color: rgba(255,255,255,0.3);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      padding: 1.5rem 1rem 0.6rem;
+      font-weight: 700;
+    }
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      padding: 0.8rem 1rem;
+      color: rgba(255,255,255,0.7);
+      text-decoration: none;
+      font-size: 0.95rem;
+      font-weight: 500;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      border-radius: 12px;
+      margin-bottom: 0.2rem;
+    }
+    .nav-link:hover { background: rgba(255,255,255,0.05); color: var(--blanco); }
+    .nav-link.activo { 
+      background: var(--dorado); 
+      color: var(--verde-profundo);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+    .nav-link svg { width: 18px; height: 18px; transition: stroke 0.2s; }
+    .nav-link.activo svg { stroke: var(--verde-profundo); }
+
+    .sidebar-footer {
+      padding: 1.5rem;
+      border-top: 1px solid rgba(255,255,255,0.05);
+    }
+    .sidebar-usuario { font-size: 0.82rem; color: rgba(255,255,255,0.4); margin-bottom: 1rem; }
+    .sidebar-usuario strong { display: block; color: var(--blanco); font-size: 0.95rem; margin-bottom: 0.2rem; }
+    .btn-salir {
+      width: 100%;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: var(--blanco);
+      padding: 0.7rem;
+      border-radius: 12px;
+      font-family: inherit;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-salir:hover { background: rgba(200,0,0,0.05); color: #ff6b6b; border-color: rgba(200,0,0,0.1); }
+
+    /* ── MAIN CONTENT ── */
+    .main { margin-left: var(--sidebar-w); flex: 1; display: flex; flex-direction: column; }
+    .topbar {
+      padding: 1.5rem 3rem;
+      display: flex; align-items: center; justify-content: space-between;
+      position: sticky; top: 0; z-index: 40;
+      background: rgba(245, 245, 247, 0.8); backdrop-filter: blur(20px);
+    }
+    .topbar-titulo { font-size: 1.8rem; font-weight: 700; color: var(--texto-oscuro); }
+    
+    .contenido { padding: 0 3rem 3rem; }
+
+    /* ── CARDS DE HABITACIONES (APPLE STYLE) ── */
+    .hab-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 2rem; }
+    .hab-card {
+      background: var(--apple-card);
+      border-radius: var(--apple-radius);
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.4);
+      box-shadow: 0 4px 24px rgba(0,0,0,0.02);
+      transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    }
+    .hab-card:hover { transform: translateY(-8px); box-shadow: 0 20px 40px rgba(0,0,0,0.08); }
+    .hab-card-img { height: 200px; overflow: hidden; position: relative; }
+    .hab-card-img img { width: 100%; height: 100%; object-fit: cover; }
+    .hab-badge {
+      position: absolute; top: 1rem; right: 1rem;
+      padding: 0.4rem 1rem; border-radius: 20px; font-size: 0.7rem; font-weight: 700;
+      background: rgba(255,255,255,0.9); backdrop-filter: blur(5px);
+    }
+    .hab-badge.activa { color: #218c49; }
+    .hab-badge.inactiva { color: #b02a2a; }
+
+    .hab-card-body { padding: 1.8rem; }
+    .hab-nombre { font-family: 'Playfair Display', serif; font-size: 1.4rem; color: var(--verde-profundo); margin-bottom: 0.5rem; }
+    .hab-desc { font-size: 0.85rem; color: var(--texto-medio); line-height: 1.6; margin-bottom: 1.5rem; height: 3.2em; overflow: hidden; }
+    
+    .hab-info { display: flex; gap: 0.8rem; margin-bottom: 1.5rem; }
+    .info-pill { background: rgba(0,0,0,0.04); padding: 0.3rem 0.8rem; border-radius: 8px; font-size: 0.75rem; font-weight: 600; color: var(--texto-medio); }
+
+    .hab-precios { border-top: 1px solid rgba(0,0,0,0.05); padding-top: 1.2rem; display: flex; justify-content: space-between; align-items: center; }
+    .precio-valor { font-size: 1.2rem; font-weight: 700; color: var(--verde-profundo); }
+    .precio-lbl { font-size: 0.65rem; color: var(--texto-medio); text-transform: uppercase; display: block; }
+
+    .btn-apple { 
+      background: var(--verde-profundo); color: white; border: none; padding: 0.7rem 1.4rem; border-radius: 12px; 
+      font-weight: 600; cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; gap: 0.5rem;
+    }
+    .btn-apple.gold { background: var(--dorado); color: var(--verde-profundo); }
+    .btn-apple:hover { transform: scale(1.03); opacity: 0.9; }
+
+    /* ── MODAL STYLES ── */
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      backdrop-filter: blur(5px);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+    .modal.visible { display: flex; }
+    .modal-content {
+      background: var(--blanco);
+      border-radius: var(--apple-radius);
+      width: 100%;
+      max-width: 500px;
+      max-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+      position: relative;
+      overflow: hidden;
+    }
+    .modal-header { 
+      padding: 2rem 2.5rem 1rem; 
+      flex-shrink: 0;
+      position: relative;
+    }
+    .modal-titulo { font-family: 'Playfair Display', serif; font-size: 1.6rem; color: var(--verde-profundo); font-weight: 700; }
+    
+    .modal-body { 
+      padding: 1rem 2.5rem; 
+      overflow-y: auto;
+      max-height: 450px;
+      flex: 1;
+    }
+    
+    .form-group { margin-bottom: 1.2rem; }
+    .form-group label { display: block; font-size: 0.75rem; font-weight: 700; color: var(--texto-medio); text-transform: uppercase; margin-bottom: 0.5rem; letter-spacing: 0.05em; }
+    .form-group input, .form-group select, .form-group textarea {
+      width: 100%; padding: 0.8rem 1rem; border-radius: 12px; border: 1px solid rgba(0,0,0,0.1); outline: none; font-family: inherit; font-size: 0.95rem; transition: border-color 0.2s;
+    }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--dorado); background: var(--blanco); }
+    
+    .modal-footer { 
+      padding: 1.5rem 2.5rem; 
+      display: flex; gap: 1rem; justify-content: flex-end; 
+      background: var(--blanco);
+      border-top: 1px solid rgba(0,0,0,0.05);
+      flex-shrink: 0;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 1.5rem;
+      right: 1.5rem;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: rgba(0,0,0,0.05);
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--texto-oscuro);
+      transition: all 0.2s;
+      z-index: 10;
+    }
+    .modal-close:hover { background: rgba(0,0,0,0.1); transform: rotate(90deg); }
+    .btn-cancelar { background: rgba(0,0,0,0.05); color: var(--texto-oscuro); border: none; padding: 0.7rem 1.5rem; border-radius: 12px; font-weight: 600; cursor: pointer; }
+
+    /* Icons */
+    svg { fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  </style>
+</head>
+<body>
+
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <h2>Treehouse<span>1959</span></h2>
+    <p>Control de Mando</p>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-seccion">Principal</div>
+    <a href="dashboard.html" class="nav-link">
+      <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+      Dashboard
+    </a>
+    <a href="reservas.html" class="nav-link">
+      <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+      Reservas
+    </a>
+    <div class="nav-seccion">Gestión</div>
+    <a href="habitaciones.html" class="nav-link activo">
+      <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 22"></polyline></svg>
+      Habitaciones
+    </a>
+    <a href="productos.html" class="nav-link">
+      <svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+      Productos
+    </a>
+    <a href="usuarios.html" class="nav-link">
+      <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+      Usuarios
+    </a>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="sidebar-usuario">
+      <strong id="sidebarNombre">Cargando...</strong>
+      Administrador
+    </div>
+    <button class="btn-salir" onclick="cerrarSesion()">Cerrar sesión</button>
+  </div>
+</aside>
+
+<div class="main">
+  <div class="topbar">
+    <span class="topbar-titulo">Habitaciones</span>
+    <button class="btn-apple gold" onclick="abrirModal()">
+      <svg style="width:16px;height:16px" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+      Añadir Habitación
+    </button>
+  </div>
+
+  <div class="contenido">
+    <div class="hab-grid" id="habGrid">
+      <!-- Se carga dinámicamente -->
+    </div>
+  </div>
+</div>
+
+<!-- ── MODAL: AÑADIR / EDITAR HABITACIÓN ── -->
+<div id="modalHabitacion" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3 id="modalTitulo" class="modal-titulo">Nueva Habitación</h3>
+      <button class="modal-close" onclick="cerrarModal()">
+        <svg viewBox="0 0 24 24" width="20" height="20"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="habId" />
+      <div class="form-group">
+        <label>Nombre de la Habitación</label>
+        <input type="text" id="habNombre" placeholder="Ej: Suite Deluxe Arbol" />
+      </div>
+      <div class="form-group">
+        <label>Descripción</label>
+        <textarea id="habDesc" rows="3" placeholder="Detalles de la habitación..."></textarea>
+      </div>
+      <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1rem">
+        <div class="form-group">
+          <label>Tipo de Cama</label>
+          <select id="habCama">
+            <option value="Sencilla">Sencilla</option>
+            <option value="Doble">Doble</option>
+            <option value="Queen">Queen</option>
+            <option value="King">King</option>
+            <option value="Familiar">Familiar</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Capacidad (Personas)</label>
+          <input type="number" id="habCapacidad" placeholder="2" />
+        </div>
+      </div>
+      <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1rem">
+        <div class="form-group">
+          <label>Precio 1 Persona (sin IVA)</label>
+          <input type="number" id="habPrecio1P" placeholder="0" oninput="recalcTotal(1)" />
+        </div>
+        <div class="form-group">
+          <label>IVA 1 Persona</label>
+          <input type="number" id="habIva1P" placeholder="0" oninput="recalcTotal(1)" />
+        </div>
+      </div>
+      <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1rem">
+        <div class="form-group">
+          <label>Precio 2 Personas (sin IVA)</label>
+          <input type="number" id="habPrecio2P" placeholder="0" oninput="recalcTotal(2)" />
+        </div>
+        <div class="form-group">
+          <label>IVA 2 Persona</label>
+          <input type="number" id="habIva2P" placeholder="0" oninput="recalcTotal(2)" />
+        </div>
+      </div>
+      <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1rem; margin-bottom: 1.2rem; background: rgba(0,0,0,0.03); padding: 0.8rem; border-radius: 12px;">
+        <div>
+          <span style="font-size: 0.65rem; color: var(--texto-medio); text-transform: uppercase; display: block; font-weight: 700;">Total 1P:</span>
+          <span id="labelTotal1P" style="font-weight: 700; color: var(--verde-profundo);">$0</span>
+        </div>
+        <div>
+          <span style="font-size: 0.65rem; color: var(--texto-medio); text-transform: uppercase; display: block; font-weight: 700;">Total 2P:</span>
+          <span id="labelTotal2P" style="font-weight: 700; color: var(--verde-profundo);">$0</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Estado</label>
+        <select id="habActiva">
+          <option value="1">Activa</option>
+          <option value="0">Inactiva</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancelar" onclick="cerrarModal()">Cancelar</button>
+      <button class="btn-apple" onclick="guardarHabitacion()">Guardar Cambios</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const usuario = JSON.parse(sessionStorage.getItem('usuario') || 'null');
+  if (!usuario || usuario.rol !== 'admin') {
+    window.location.href = '../login.html';
+  } else {
+    document.getElementById('sidebarNombre').textContent = usuario.nombre;
+  }
+
+  let todasHabitaciones = [];
+
+  async function cargar() {
+    try {
+      const res = await fetch('/api/admin/habitaciones-todas');
+      const data = await res.json();
+      todasHabitaciones = data.data || [];
+      renderCards(todasHabitaciones);
+    } catch(e) { console.error(e); }
+  }
+
+  function renderCards(lista) {
+    const grid = document.getElementById('habGrid');
+    grid.innerHTML = lista.map(h => `
+      <div class="hab-card">
+        <div class="hab-card-img">
+          <img src="../../imagenes/habitaciones/${h.nombre.includes('Familiar') ? 'Familiar' : (h.nombre.includes('Doble') ? 'Doble' : 'Queen')}.jpeg" alt="${h.nombre}" onerror="this.src='../../imagenes/habitaciones/Doble.jpeg'"/>
+          <span class="hab-badge ${h.activa ? 'activa':'inactiva'}">${h.activa ? '● Activa' : '○ Inactiva'}</span>
+        </div>
+        <div class="hab-card-body">
+          <h3 class="hab-nombre">${h.nombre}</h3>
+          <p class="hab-desc">${h.descripcion || 'Sin descripción disponible.'}</p>
+          <div class="hab-info">
+            <span class="info-pill">🛏 ${h.tipo_cama || 'Doble'}</span>
+            <span class="info-pill">👤 Max ${h.capacidad}</span>
+          </div>
+          <div class="hab-precios">
+            <div>
+              <span class="precio-lbl">Total (1p / 2p)</span>
+              <span class="precio-valor">$${Number(h.valor_1p).toLocaleString('es-CO')} / $${Number(h.valor_2p || 0).toLocaleString('es-CO')}</span>
+            </div>
+            <button class="btn-apple" onclick="abrirModal(${h.id})">Editar</button>
+          </div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function recalcTotal(num) {
+    const p = Number(document.getElementById('habPrecio' + num + 'P').value) || 0;
+    const i = Number(document.getElementById('habIva' + num + 'P').value) || 0;
+    document.getElementById('labelTotal' + num + 'P').textContent = '$' + (p + i).toLocaleString('es-CO');
+  }
+
+  // ── LÓGICA MODAL ──
+  function abrirModal(id = null) {
+    const modal = document.getElementById('modalHabitacion');
+    const titulo = document.getElementById('modalTitulo');
+    
+    if (id) {
+      const h = todasHabitaciones.find(hab => hab.id == id);
+      titulo.textContent = 'Editar Habitación';
+      document.getElementById('habId').value        = h.id;
+      document.getElementById('habNombre').value    = h.nombre;
+      document.getElementById('habDesc').value      = h.descripcion || '';
+      document.getElementById('habCama').value      = h.tipo_cama || 'Doble';
+      document.getElementById('habCapacidad').value = h.capacidad;
+      
+      document.getElementById('habPrecio1P').value  = h.precio_1p || 0;
+      document.getElementById('habIva1P').value     = h.iva_1p || 0;
+      document.getElementById('habPrecio2P').value  = h.precio_2p || 0;
+      document.getElementById('habIva2P').value     = h.iva_2p || 0;
+      
+      document.getElementById('habActiva').value    = h.activa ? "1" : "0";
+      recalcTotal(1); recalcTotal(2);
+    } else {
+      titulo.textContent = 'Nueva Habitación';
+      document.getElementById('habId').value        = "";
+      document.getElementById('habNombre').value    = "";
+      document.getElementById('habDesc').value      = "";
+      document.getElementById('habCama').value      = "Doble";
+      document.getElementById('habCapacidad').value = "";
+      document.getElementById('habPrecio1P').value  = "";
+      document.getElementById('habIva1P').value     = "";
+      document.getElementById('habPrecio2P').value  = "";
+      document.getElementById('habIva2P').value     = "";
+      document.getElementById('habActiva').value    = "1";
+      recalcTotal(1); recalcTotal(2);
+    }
+    modal.classList.add('visible');
+  }
+
+  function cerrarModal() {
+    document.getElementById('modalHabitacion').classList.remove('visible');
+  }
+
+  async function guardarHabitacion() {
+    const id = document.getElementById('habId').value;
+    
+    const p1 = Number(document.getElementById('habPrecio1P').value) || 0;
+    const i1 = Number(document.getElementById('habIva1P').value) || 0;
+    const p2 = Number(document.getElementById('habPrecio2P').value) || 0;
+    const i2 = Number(document.getElementById('habIva2P').value) || 0;
+
+    const datos = {
+      nombre:      document.getElementById('habNombre').value,
+      descripcion: document.getElementById('habDesc').value,
+      tipo_cama:   document.getElementById('habCama').value,
+      capacidad:   document.getElementById('habCapacidad').value,
+      precio_1p:   p1,
+      iva_1p:      i1,
+      valor_1p:    p1 + i1,
+      precio_2p:   p2,
+      iva_2p:      i2,
+      valor_2p:    p2 + i2,
+      activa:      document.getElementById('habActiva').value === "1"
+    };
+
+    if (!datos.nombre || datos.valor_1p <= 0) return alert('Nombre y Precios son obligatorios');
+
+    try {
+      const url    = id ? `/api/admin/habitaciones/${id}` : '/api/admin/habitaciones';
+      const method = id ? 'PUT' : 'POST';
+      
+      const res = await fetch(url, {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(datos)
+      });
+      
+      const data = await res.json();
+      if (data.ok) {
+        cerrarModal();
+        cargar();
+      } else {
+        alert('Error al guardar: ' + data.mensaje);
+      }
+    } catch (e) { console.error(e); }
+  }
+
+  function cerrarSesion() { sessionStorage.removeItem('usuario'); window.location.href = '../login.html'; }
+  cargar();
+</script>
+</body>
+</html>
+

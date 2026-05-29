@@ -1,0 +1,1010 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Recepción — Treehouse1959</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet" />
+	
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <meta name="theme-color" content="#ffffff">
+	
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --verde-profundo: #1a3a2a;
+      --verde-musgo:    #2d5a3d;
+      --verde-selva:    #3d7a52;
+      --tierra:         #8b6242;
+      --arena:          #f0e8d8;
+      --crema:          #faf7f2;
+      --dorado:         #c9a84c;
+      --dorado-claro:   #e8c97a;
+      --blanco:         #ffffff;
+      --texto-oscuro:   #1c2b20;
+      --texto-medio:    #4a5e50;
+      --sidebar-w:      260px;
+      --apple-bg:       #f5f5f7;
+      --apple-card:     rgba(255, 255, 255, 0.8);
+      --apple-radius:   20px;
+    }
+    body { 
+      font-family: 'DM Sans', -apple-system, sans-serif; 
+      background: var(--apple-bg); 
+      color: var(--texto-oscuro); 
+      display: flex; 
+      min-height: 100vh;
+      letter-spacing: -0.01em;
+    }
+
+    /* ── SIDEBAR (Modern Apple Style - Dark Version) ── */
+    .sidebar {
+      width: var(--sidebar-w);
+      background: var(--verde-profundo);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      top: 0; left: 0; bottom: 0;
+      z-index: 50;
+    }
+    .sidebar-logo {
+      padding: 2.5rem 1.8rem 1.5rem;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .sidebar-logo h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      color: var(--blanco);
+      font-weight: 700;
+    }
+    .sidebar-logo h2 span { color: var(--dorado); font-style: italic; }
+    .sidebar-logo p { 
+      font-size: 0.65rem; 
+      color: rgba(255,255,255,0.4); 
+      text-transform: uppercase; 
+      letter-spacing: 0.15em; 
+      margin-top: 0.4rem;
+      font-weight: 600;
+    }
+
+    .sidebar-nav { flex: 1; padding: 1.5rem 0.8rem; }
+    .nav-seccion {
+      font-size: 0.7rem;
+      color: rgba(255,255,255,0.3);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      padding: 1.5rem 1rem 0.6rem;
+      font-weight: 700;
+    }
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      padding: 0.8rem 1rem;
+      color: rgba(255,255,255,0.7);
+      text-decoration: none;
+      font-size: 0.95rem;
+      font-weight: 500;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      border-radius: 12px;
+      margin-bottom: 0.2rem;
+    }
+    .nav-link:hover { background: rgba(255,255,255,0.05); color: var(--blanco); }
+    .nav-link.activo { 
+      background: var(--dorado); 
+      color: var(--verde-profundo);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+    .nav-link svg { width: 18px; height: 18px; stroke: currentColor; }
+    .nav-link.activo svg { stroke: var(--verde-profundo); }
+
+    .sidebar-footer {
+      padding: 1.5rem;
+      border-top: 1px solid rgba(255,255,255,0.05);
+    }
+    .sidebar-usuario { font-size: 0.82rem; color: rgba(255,255,255,0.4); margin-bottom: 1rem; }
+    .sidebar-usuario strong { display: block; color: var(--blanco); font-size: 0.95rem; margin-bottom: 0.2rem; }
+    .btn-salir {
+      width: 100%;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: var(--blanco);
+      padding: 0.7rem;
+      border-radius: 12px;
+      font-family: inherit;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-salir:hover { background: rgba(200,0,0,0.05); color: #ff6b6b; border-color: rgba(200,0,0,0.1); }
+
+    /* ── MAIN CONTENT ── */
+    .main {
+      margin-left: var(--sidebar-w);
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    .topbar {
+      padding: 1.5rem 3rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky; top: 0;
+      z-index: 40;
+      background: rgba(245, 245, 247, 0.8);
+      backdrop-filter: blur(20px);
+    }
+    .topbar-titulo { font-size: 1.8rem; font-weight: 700; color: var(--texto-oscuro); letter-spacing: -0.02em; }
+    .topbar-fecha { font-size: 0.9rem; color: var(--texto-medio); font-weight: 500; }
+    .topbar-actions { display: flex; align-items: center; gap: 1rem; }
+    
+    .search-input-header {
+      background: var(--blanco);
+      border: 2px solid var(--dorado);
+      border-radius: 12px;
+      padding: 0.7rem 1.2rem;
+      font-family: inherit;
+      font-size: 0.9rem;
+      outline: none;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+      width: 200px;
+      transition: all 0.2s;
+    }
+    .search-input-header:focus { width: 260px; }
+
+    .btn-apple {
+      border: 2px solid transparent;
+      padding: 0.7rem 1.5rem;
+      border-radius: 12px;
+      font-family: inherit;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .btn-apple.gold { 
+      background: var(--dorado); 
+      color: var(--verde-profundo); 
+      border-color: var(--dorado);
+    }
+    .btn-apple.gold:hover { background: var(--dorado-claro); border-color: var(--dorado-claro); }
+
+    .contenido { padding: 0 3rem 3rem; }
+
+    /* ── STATS ── */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      margin-bottom: 2.5rem;
+    }
+    .stat-card {
+      background: var(--apple-card);
+      backdrop-filter: blur(10px);
+      border-radius: var(--apple-radius);
+      padding: 1.8rem;
+      border: 1px solid rgba(255,255,255,0.4);
+      box-shadow: 0 4px 24px rgba(0,0,0,0.02);
+      transition: transform 0.3s;
+    }
+    .stat-card:hover { transform: translateY(-5px); box-shadow: 0 12px 40px rgba(0,0,0,0.06); }
+    
+    .stat-icono-box {
+      width: 42px; height: 42px;
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 1.2rem;
+    }
+    .stat-icono-box svg { width: 22px; height: 22px; }
+    
+    .stat-icono-box.verde  { background: rgba(45,90,61,0.1); color: var(--verde-musgo); }
+    .stat-icono-box.dorado { background: rgba(201,168,76,0.1); color: var(--dorado); }
+    .stat-icono-box.tierra { background: rgba(139,98,66,0.1); color: var(--tierra); }
+
+    .stat-num { font-size: 2.2rem; font-weight: 700; color: var(--texto-oscuro); line-height: 1; letter-spacing: -0.04em; }
+    .stat-lbl { font-size: 0.85rem; color: var(--texto-medio); margin-top: 0.4rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+
+    /* ── TABS AND FILTERS ── */
+    .filter-bar {
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+    .tabs { 
+      display: flex; 
+      gap: 0.5rem; 
+      background: rgba(0,0,0,0.04); 
+      padding: 0.4rem; 
+      border-radius: 12px; 
+    }
+    .tab { 
+      padding: 0.5rem 1.2rem; 
+      border-radius: 8px; 
+      font-size: 0.85rem; 
+      font-weight: 600; 
+      cursor: pointer; 
+      border: none; 
+      background: none; 
+      color: var(--texto-medio); 
+      transition: all 0.2s; 
+    }
+    .tab.activo { background: var(--blanco); color: var(--texto-oscuro); box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+
+    .search-input-main {
+      flex: 1;
+      min-width: 250px;
+      background: var(--blanco);
+      border: 1px solid rgba(0,0,0,0.05);
+      border-radius: 12px;
+      padding: 0.7rem 1.2rem;
+      font-family: inherit;
+      font-size: 0.9rem;
+      outline: none;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+    }
+
+    /* ── DATA TABLE ── */
+    .tabla-wrap {
+      background: var(--blanco);
+      border-radius: var(--apple-radius);
+      box-shadow: 0 4px 24px rgba(0,0,0,0.03);
+      border: 1px solid rgba(0,0,0,0.02);
+      overflow: hidden;
+    }
+    .tabla-header {
+      padding: 1.5rem 2rem;
+      border-bottom: 1px solid rgba(0,0,0,0.03);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .tabla-titulo { font-weight: 700; font-size: 1.1rem; color: var(--texto-oscuro); }
+    .contador-badge {
+      font-size: 0.8rem;
+      color: var(--texto-medio);
+      background: var(--apple-bg);
+      padding: 0.3rem 0.8rem;
+      border-radius: 20px;
+      font-weight: 600;
+    }
+
+    table { width: 100%; border-collapse: collapse; }
+    thead th { 
+      padding: 1rem 1.5rem; 
+      text-align: left; 
+      font-size: 0.72rem; 
+      font-weight: 700; 
+      color: var(--texto-medio); 
+      text-transform: uppercase; 
+      letter-spacing: 0.1em;
+      opacity: 0.6;
+    }
+    tbody tr { border-bottom: 1px solid rgba(0,0,0,0.03); transition: background 0.15s; }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: var(--apple-bg); }
+    tbody td { padding: 1.2rem 1.5rem; font-size: 0.92rem; color: var(--texto-oscuro); vertical-align: middle; }
+
+    .badge {
+      display: inline-flex;
+      padding: 0.3rem 0.8rem;
+      border-radius: 8px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: capitalize;
+    }
+    .badge.pendiente  { background: rgba(255,166,0,0.1); color: #d68100; }
+    .badge.confirmada { background: rgba(45,180,100,0.1); color: #218c49; }
+
+    .btn-ver { 
+      background: var(--verde-profundo); 
+      color: var(--blanco); 
+      text-decoration: none; 
+      padding: 0.6rem 1.2rem; 
+      border-radius: 10px; 
+      font-size: 0.82rem; 
+      font-weight: 600; 
+      transition: all 0.2s; 
+      display: inline-block;
+    }
+    .btn-ver:hover { transform: scale(1.05); box-shadow: 0 4px 12px rgba(26,58,42,0.15); }
+
+    /* Icons Helpers */
+    svg { fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+    @media (max-width: 900px) { .main { margin-left: 0; } .sidebar { display: none; } .topbar, .contenido { padding: 1.5rem; } }
+
+    /* ── MODAL RESERVA MANUAL ── */
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      backdrop-filter: blur(5px);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+    .modal.visible { display: flex; }
+    .modal-content {
+      background: var(--blanco);
+      padding: 2.5rem;
+      border-radius: var(--apple-radius);
+      width: 100%;
+      max-width: 850px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+      position: relative;
+    }
+    .modal-header { margin-bottom: 2rem; border-bottom: 1px solid rgba(0,0,0,0.05); padding-bottom: 1rem; }
+    .modal-titulo { font-family: 'Playfair Display', serif; font-size: 1.6rem; color: var(--verde-profundo); font-weight: 700; }
+    
+    .form-manual-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .form-group { margin-bottom: 1rem; }
+    .form-group.full { grid-column: span 2; }
+    .form-group label { display: block; font-size: 0.7rem; font-weight: 700; color: var(--texto-medio); text-transform: uppercase; margin-bottom: 0.5rem; letter-spacing: 0.05em; }
+    .form-group input, .form-group select, .form-group textarea {
+      width: 100%; padding: 0.7rem 1rem; border-radius: 12px; border: 1px solid rgba(0,0,0,0.1); outline: none; font-family: inherit; font-size: 0.9rem; transition: border-color 0.2s;
+    }
+    .form-group input:focus, .form-group select:focus { border-color: var(--dorado); }
+    
+    .modal-footer { margin-top: 1.5rem; display: flex; gap: 1rem; justify-content: flex-end; }
+    .btn-cancelar { background: rgba(0,0,0,0.05); color: var(--texto-oscuro); border: none; padding: 0.8rem 1.5rem; border-radius: 12px; font-weight: 600; cursor: pointer; }
+    .btn-guardar { background: var(--verde-profundo); color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 12px; font-weight: 600; cursor: pointer; }
+    .btn-guardar:hover { background: var(--verde-musgo); }
+
+    /* ── CUSTOM CALENDAR STYLES (MATCHING ADMIN/PUBLIC SITE) ── */
+    .booking-field--fechas-admin {
+      display: flex; align-items: center; gap: 1rem;
+      background: var(--crema); border: 1px solid rgba(0,0,0,0.1);
+      border-radius: 12px; padding: 0.8rem 1.2rem; cursor: pointer;
+      transition: all 0.2s; position: relative;
+    }
+    .booking-field--fechas-admin:hover, .booking-field--fechas-admin.activo { border-color: var(--dorado); box-shadow: 0 4px 12px rgba(201,168,76,0.1); }
+    .fecha-col { display: flex; flex-direction: column; flex: 1; }
+    .fecha-label-admin { font-size: 0.65rem; color: var(--texto-medio); text-transform: uppercase; font-weight: 700; letter-spacing: 0.05em; margin-bottom: 0.2rem; }
+    .fecha-valor-admin { font-size: 0.95rem; color: var(--verde-profundo); font-weight: 600; }
+    .fecha-separador-admin { color: rgba(0,0,0,0.2); font-size: 1.2rem; }
+
+    .noches-badge-admin {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      background: rgba(201,168,76,0.1); border: 1px solid rgba(201,168,76,0.3);
+      border-radius: 10px; padding: 0.3rem 0.6rem; min-width: 60px;
+    }
+    #nochesNumManual { font-family: 'Playfair Display', serif; font-size: 1.2rem; color: var(--dorado); line-height: 1; font-weight: 700; }
+    #nochesTextoManual { font-size: 0.6rem; color: var(--texto-medio); text-transform: uppercase; margin-top: 0.1rem; }
+
+    .cal-popup-admin {
+      display: none; position: absolute; top: calc(100% + 8px); left: 0;
+      z-index: 500; background: #fff; border-radius: 1.2rem;
+      box-shadow: 0 15px 45px rgba(0,0,0,0.15); padding: 1.2rem; width: 580px;
+      border: 1px solid rgba(0,0,0,0.05);
+    }
+    .cal-popup-admin.visible { display: block; }
+    .cal-header-admin { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; }
+    .cal-nav-admin { background: none; border: 1px solid rgba(0,0,0,0.1); border-radius: 50%; width: 30px; height: 30px; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--verde-profundo); }
+    .cal-nav-admin:hover { background: var(--arena); }
+    .cal-meses-admin { display: flex; gap: 1rem; flex: 1; justify-content: center; }
+    .cal-mes-titulo { font-family: 'Playfair Display', serif; font-size: 1rem; color: var(--verde-profundo); font-weight: 700; min-width: 200px; text-align: center; }
+    
+    .cal-grids-admin { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+    .cal-grid { width: 100%; }
+    .cal-dias-semana { display: grid; grid-template-columns: repeat(7, 1fr); margin-bottom: 0.3rem; }
+    .cal-dia-sem { text-align: center; font-size: 0.65rem; color: var(--texto-medio); font-weight: 700; text-transform: uppercase; opacity: 0.5; }
+    .cal-dias { display: grid; grid-template-columns: repeat(7, 1fr); gap: 1px; }
+    .cal-dia { 
+      aspect-ratio: 1; display: flex; align-items: center; justify-content: center; 
+      font-size: 0.8rem; border-radius: 50%; cursor: pointer; transition: all 0.2s; position: relative;
+    }
+    .cal-dia:hover:not(.vacio):not(.pasado) { background: var(--arena); }
+    .cal-dia.pasado { color: rgba(0,0,0,0.1); cursor: not-allowed; }
+    .cal-dia.seleccionado { background: var(--verde-profundo) !important; color: #fff !important; font-weight: 700; }
+    .cal-dia.en-rango { background: rgba(26,58,42,0.05); border-radius: 0; color: var(--verde-profundo); }
+    .cal-dia.rango-inicio { background: var(--verde-profundo) !important; color: #fff !important; border-radius: 50% 0 0 50%; }
+    .cal-dia.rango-fin { background: var(--verde-profundo) !important; color: #fff !important; border-radius: 0 50% 50% 0; }
+    .cal-dia.rango-inicio.rango-fin { border-radius: 50%; }
+
+    .cal-footer-admin { display: flex; justify-content: space-between; align-items: center; margin-top: 1rem; border-top: 1px solid rgba(0,0,0,0.05); padding-top: 0.8rem; }
+    #calInstruccionManual { font-size: 0.75rem; color: var(--texto-medio); }
+    #calLimpiarManual { background: none; border: none; color: var(--tierra); cursor: pointer; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; }
+
+    @media (max-width: 600px) {
+      .cal-popup-admin { width: calc(100vw - 4rem); left: 0; transform: none; }
+      .cal-grids-admin { grid-template-columns: 1fr; }
+      .cal-mes-titulo:last-child { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <h2>Treehouse<span>1959</span></h2>
+    <p>Recepción</p>
+  </div>
+  <div class="sidebar-nav">
+    <div class="nav-seccion">Panel</div>
+    <a href="dashboard.html" class="nav-link activo">
+      <svg viewBox="0 0 24 24" width="18" height="18"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 22"></polyline></svg>
+      Dashboard
+    </a>
+  </div>
+
+  <div class="sidebar-footer">
+    <div class="sidebar-usuario"><strong id="sidebarNombre">—</strong>Recepcionista</div>
+    <button class="btn-salir" onclick="cerrarSesion()">Cerrar sesión</button>
+  </div>
+</aside>
+
+<div class="main">
+  <div class="topbar">
+    <span class="topbar-titulo">Recepción</span>
+    <div class="topbar-actions">
+      <button class="btn-apple gold" onclick="abrirModalReserva()" style="padding: 0.6rem 1.2rem; font-size: 0.85rem; margin-right: 1rem;">
+        + Reserva Manual
+      </button>
+      <input type="number" id="inputReservaId" class="search-input-header" placeholder="Buscar ID#" onkeydown="if(event.key==='Enter') irHuesped()" />
+      <span class="topbar-fecha" id="topbarFecha"></span>
+    </div>
+  </div>
+
+  <div class="contenido">
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icono-box verde">
+          <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+        </div>
+        <div><div class="stat-num" id="statCheckinHoy">—</div><div class="stat-lbl">Entradas</div></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icono-box dorado">
+          <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
+        </div>
+        <div><div class="stat-num" id="statActivos">—</div><div class="stat-lbl">En Hotel</div></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icono-box tierra">
+          <svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+        </div>
+        <div><div class="stat-num" id="statCheckoutHoy">—</div><div class="stat-lbl">Salidas</div></div>
+      </div>
+    </div>
+
+    <div class="filter-bar">
+      <div class="tabs">
+        <button class="tab activo" onclick="cambiarTab('checkin')">Entradas</button>
+        <button class="tab"        onclick="cambiarTab('activos')">Huéspedes</button>
+        <button class="tab"        onclick="cambiarTab('todas')">Historial</button>
+      </div>
+      <input type="text" id="filtroBuscar" class="search-input-main" placeholder="🔍 Buscar por nombre o habitación..." oninput="filtrar()" />
+    </div>
+
+    <div class="tabla-wrap">
+      <div class="tabla-header">
+        <span class="tabla-titulo" id="tabTitulo">Entradas de hoy</span>
+        <span id="contadorTab" class="contador-badge"></span>
+      </div>
+      <div id="cuerpoTabla" style="overflow-x:auto">
+        <div style="padding:3rem;text-align:center;opacity:0.5">Cargando registros...</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ── MODAL: NUEVA RESERVA MANUAL ── -->
+<div id="modalReserva" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3 class="modal-titulo">Nueva Reserva Directa</h3>
+    </div>
+    <form id="formManual" onsubmit="guardarReservaManual(event)">
+      <div class="form-manual-grid">
+        <!-- DATOS HUÉSPED -->
+        <div class="form-group">
+          <label>Nombre(s)</label>
+          <input type="text" id="mNombre" required placeholder="Ej: Juan" />
+        </div>
+        <div class="form-group">
+          <label>Apellidos</label>
+          <input type="text" id="mApellidos" required placeholder="Ej: Pérez" />
+        </div>
+        <div class="form-group">
+          <label>Tipo Doc.</label>
+          <select id="mDocTipo">
+            <option value="CC">Cédula de Ciudadanía</option>
+            <option value="CE">Cédula de Extranjería</option>
+            <option value="Pasaporte">Pasaporte</option>
+            <option value="NIT">NIT</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Núm. Documento</label>
+          <input type="text" id="mDocNum" required />
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" id="mEmail" required placeholder="huesped@correo.com" />
+        </div>
+        <div class="form-group">
+          <label>Teléfono</label>
+          <input type="tel" id="mTelefono" required placeholder="+57 300..." />
+        </div>
+        <div class="form-group">
+          <label>Nacionalidad</label>
+          <input type="text" id="mNacionalidad" placeholder="Colombiana" />
+        </div>
+        <div class="form-group">
+          <label>Profesión</label>
+          <input type="text" id="mProfesion" placeholder="Ingeniero..." />
+        </div>
+        <div class="form-group">
+          <label>Empresa</label>
+          <input type="text" id="mEmpresa" placeholder="Opcional" />
+        </div>
+        <div class="form-group">
+          <label>Placa Vehículo</label>
+          <input type="text" id="mPlaca" placeholder="ABC-123" />
+        </div>
+        <div class="form-group">
+          <label>País</label>
+          <input type="text" id="mPais" placeholder="Colombia" />
+        </div>
+        <div class="form-group">
+          <label>Ciudad</label>
+          <input type="text" id="mCiudad" placeholder="Villavicencio" />
+        </div>
+        
+        <!-- DATOS ESTADÍA -->
+        <div class="form-group full" style="margin-top: 1rem; border-top: 1px solid rgba(0,0,0,0.05); padding-top: 1rem;">
+          <label style="color: var(--verde-musgo)">Información de Estadía</label>
+        </div>
+        <div class="form-group full">
+          <label>Habitación</label>
+          <select id="mHabitacion" required>
+            <option value="">Cargando habitaciones...</option>
+          </select>
+        </div>
+
+        <div class="form-group full" style="position: relative;">
+          <label>Rango de Estadía</label>
+          <div class="booking-field--fechas-admin" id="triggerFechasManual">
+            <div class="fecha-col">
+              <span class="fecha-label-admin">Check-in</span>
+              <span class="fecha-valor-admin" id="labelCheckinManual">Seleccionar</span>
+            </div>
+            <div class="fecha-separador-admin">→</div>
+            <div class="fecha-col">
+              <span class="fecha-label-admin">Check-out</span>
+              <span class="fecha-valor-admin" id="labelCheckoutManual">Seleccionar</span>
+            </div>
+            <div class="noches-badge-admin" id="nochesBadgeManual" style="display:none">
+              <span id="nochesNumManual">0</span>
+              <span id="nochesTextoManual">noches</span>
+            </div>
+          </div>
+          <input type="hidden" id="mCheckin" required />
+          <input type="hidden" id="mCheckout" required />
+
+          <!-- Popup de Calendario -->
+          <div class="cal-popup-admin" id="calPopupManual">
+            <div class="cal-header-admin">
+              <button type="button" class="cal-nav-admin" id="calPrevManual">&#8249;</button>
+              <div class="cal-meses-admin" id="calMesesManual"></div>
+              <button type="button" class="cal-nav-admin" id="calNextManual">&#8250;</button>
+            </div>
+            <div class="cal-grids-admin" id="calGridsManual"></div>
+            <div class="cal-footer-admin">
+              <span id="calInstruccionManual">Selecciona la llegada</span>
+              <button type="button" id="calLimpiarManual">Limpiar</button>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Adultos</label>
+          <select id="mAdultos">
+            <option value="1">1 Adulto</option>
+            <option value="2" selected>2 Adultos</option>
+            <option value="3">3 Adultos</option>
+            <option value="4">4 Adultos</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Niños</label>
+          <select id="mNinos">
+            <option value="0">Sin niños</option>
+            <option value="1">1 Niño</option>
+            <option value="2">2 Niños</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Método de Pago</label>
+          <select id="mPago">
+            <option value="hotel">Pago en Hotel</option>
+            <option value="efectivo">Efectivo</option>
+            <option value="transferencia">Transferencia</option>
+            <option value="prepago">Prepago</option>
+          </select>
+        </div>
+        <div class="form-group">
+           <label>Estancia Previa</label>
+           <select id="mEstanciaPrevia">
+             <option value="0">No</option>
+             <option value="1">Sí</option>
+           </select>
+        </div>
+        <div class="form-group full">
+          <label>Acompañantes</label>
+          <textarea id="mAcompanantes" rows="2" placeholder="Nombres de acompañantes..."></textarea>
+        </div>
+        <div class="form-group full">
+          <label>Comentario</label>
+          <textarea id="mComentario" rows="2" placeholder="Notas adicionales..."></textarea>
+        </div>
+      </div>
+      
+      <div class="modal-footer">
+        <button type="button" class="btn-cancelar" onclick="cerrarModalReserva()">Cancelar</button>
+        <button type="submit" class="btn-guardar" id="btnGuardarManual">Guardar Reserva</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+  const usuario = JSON.parse(sessionStorage.getItem('usuario') || localStorage.getItem('usuario') || 'null');
+  if (!usuario || usuario.rol !== 'recepcionista') window.location.href = '../login.html';
+  else document.getElementById('sidebarNombre').textContent = usuario.nombre;
+
+  // Lógica de Modal Reserva Manual
+  function abrirModalReserva() {
+    const modal = document.getElementById('modalReserva');
+    modal.classList.add('visible');
+    
+    // Set default dates (today and tomorrow)
+    const hoy = new Date();
+    const mañana = new Date(); mañana.setDate(hoy.getDate() + 1);
+    document.getElementById('mCheckin').value = hoy.toISOString().split('T')[0];
+    document.getElementById('mCheckout').value = mañana.toISOString().split('T')[0];
+    
+    cargarHabitaciones();
+  }
+
+  // Evento para buscar huésped existente
+  document.getElementById('mDocNum').addEventListener('blur', async function() {
+    const doc = this.value.trim();
+    if (!doc) return;
+
+    try {
+      const res = await fetch(`/api/buscar-huesped/${doc}`);
+      const result = await res.json();
+
+      if (result.ok && result.data) {
+        const h = result.data;
+        document.getElementById('mNombre').value = h.nombre || '';
+        document.getElementById('mApellidos').value = h.apellidos || '';
+        document.getElementById('mDocTipo').value = h.documento_tipo || 'CC';
+        document.getElementById('mEmail').value = h.email || '';
+        document.getElementById('mTelefono').value = h.telefono || '';
+        document.getElementById('mNacionalidad').value = h.nacionalidad || '';
+        document.getElementById('mProfesion').value = h.profesion || '';
+        document.getElementById('mEmpresa').value = h.empresa || '';
+        document.getElementById('mPlaca').value = h.placa_vehiculo || '';
+        document.getElementById('mPais').value = h.pais || '';
+        document.getElementById('mCiudad').value = h.ciudad || '';
+        document.getElementById('mEstanciaPrevia').value = "1";
+        
+        console.log('✅ Datos de huésped autocompletados');
+      }
+    } catch (error) {
+      console.error('Error al buscar huésped:', error);
+    }
+  });
+
+  function cerrarModalReserva() {
+    document.getElementById('modalReserva').classList.remove('visible');
+    document.getElementById('formManual').reset();
+  }
+
+  async function cargarHabitaciones() {
+    const select = document.getElementById('mHabitacion');
+    try {
+      const res = await fetch('/api/habitaciones');
+      const data = await res.json();
+      const habs = data.data || [];
+      select.innerHTML = habs.map(h => `<option value="${h.id}">${h.nombre} - $${Number(h.valor_2p).toLocaleString()} /noche</option>`).join('');
+    } catch (e) {
+      select.innerHTML = '<option value="">Error al cargar</option>';
+    }
+  }
+
+  async function guardarReservaManual(e) {
+    e.preventDefault();
+    const btn = document.getElementById('btnGuardarManual');
+    btn.disabled = true;
+    btn.textContent = 'Guardando...';
+
+    const ci = document.getElementById('mCheckin').value;
+    const co = document.getElementById('mCheckout').value;
+    const noches = Math.round((new Date(co) - new Date(ci)) / (1000 * 60 * 60 * 24));
+
+    const datos = {
+      nombre: document.getElementById('mNombre').value,
+      apellidos: document.getElementById('mApellidos').value,
+      documento_tipo: document.getElementById('mDocTipo').value,
+      documento_num: document.getElementById('mDocNum').value,
+      email: document.getElementById('mEmail').value,
+      telefono: document.getElementById('mTelefono').value,
+      nacionalidad: document.getElementById('mNacionalidad').value,
+      profesion: document.getElementById('mProfesion').value,
+      empresa: document.getElementById('mEmpresa').value,
+      placa_vehiculo: document.getElementById('mPlaca').value,
+      pais: document.getElementById('mPais').value,
+      ciudad: document.getElementById('mCiudad').value,
+      habitacion_id: document.getElementById('mHabitacion').value,
+      fecha_checkin: ci,
+      fecha_checkout: co,
+      num_adultos: document.getElementById('mAdultos').value,
+      num_ninos: document.getElementById('mNinos').value,
+      num_noches: noches,
+      metodo_pago: document.getElementById('mPago').value,
+      acompanantes_nombres: document.getElementById('mAcompanantes').value,
+      comentario: document.getElementById('mComentario').value,
+      info_comercial: false,
+      estancia_previa: document.getElementById('mEstanciaPrevia').value === '1'
+    };
+
+    try {
+      const res = await fetch('/api/reserva/pdf', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(datos)
+      });
+
+      if (res.ok) {
+        alert('✅ Reserva manual registrada y comprobante generado');
+        
+        // Descargar PDF
+        const blob = await res.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `Comprobante_${datos.nombre}_${datos.documento_num}.pdf`;
+        document.body.appendChild(a);
+        a.click();
+        
+        // Limpieza
+        a.remove();
+        window.URL.revokeObjectURL(url);
+
+        cerrarModalReserva();
+        cargar(); // Recargar tabla
+      } else {
+        const error = await res.json();
+        alert('❌ Error al guardar: ' + (error.mensaje || 'Error desconocido'));
+      }
+    } catch (err) {
+      console.error('Error:', err);
+      alert('❌ Error de conexión con el servidor');
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Guardar Reserva';
+    }
+  }
+
+  const ahora = new Date();
+  document.getElementById('topbarFecha').textContent = ahora.toLocaleDateString('es-CO', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+
+  let tabActual = 'checkin';
+  let datosCheckin = [], datosActivos = [], datosTodasReservas = [];
+
+  function formatFecha(iso) {
+    if (!iso) return '—';
+    return new Date(iso).toLocaleDateString('es-CO', { day:'2-digit', month:'short' });
+  }
+
+  function renderTabla(lista) {
+    document.getElementById('contadorTab').textContent = lista.length + ' item' + (lista.length !== 1 ? 's' : '');
+    if (lista.length === 0) {
+      document.getElementById('cuerpoTabla').innerHTML = '<div style="padding:4rem;text-align:center;opacity:0.4">No hay datos para mostrar</div>';
+      return;
+    }
+    document.getElementById('cuerpoTabla').innerHTML = `
+      <table>
+        <thead><tr>
+          <th>ID</th><th>Huésped</th><th>Cuarto</th>
+          <th>Entrada</th><th>Salida</th><th>Estado</th><th>Acción</th>
+        </tr></thead>
+        <tbody>
+          ${lista.map(r => `
+            <tr>
+              <td style="font-weight:700;color:var(--verde-musgo)">#${r.id}</td>
+              <td>
+                <div style="font-weight:700">${r.nombre} ${r.apellidos}</div>
+                <div style="font-size:0.75rem;opacity:0.6">${r.telefono}</div>
+              </td>
+              <td><span style="font-weight:600">${r.habitacion}</span></td>
+              <td>${formatFecha(r.fecha_checkin)}</td>
+              <td>${formatFecha(r.fecha_checkout)}</td>
+              <td><span class="badge ${r.estado}">${r.estado}</span></td>
+              <td><a href="huesped.html?id=${r.id}" class="btn-ver">Gestionar</a></td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>`;
+  }
+
+  function getDatosPorTab() {
+    if (tabActual === 'checkin') return datosCheckin;
+    if (tabActual === 'activos') return datosActivos;
+    return datosTodasReservas;
+  }
+
+  function filtrar() {
+    const texto = (document.getElementById('filtroBuscar').value || '').toLowerCase();
+    const base  = getDatosPorTab();
+    const lista = texto
+      ? base.filter(r => (r.nombre + ' ' + r.apellidos + ' ' + r.habitacion).toLowerCase().includes(texto))
+      : base;
+    renderTabla(lista);
+  }
+
+  function cambiarTab(tab) {
+    tabActual = tab;
+    const titulos = { checkin: 'Entradas de hoy', activos: 'Huéspedes en casa', todas: 'Historial de reservas' };
+    document.querySelectorAll('.tab').forEach(t => {
+      t.classList.toggle('activo', t.textContent.toLowerCase().includes(tab.substring(0,3)));
+    });
+    document.getElementById('tabTitulo').textContent = titulos[tab];
+    document.getElementById('filtroBuscar').value = '';
+    filtrar();
+  }
+
+  async function cargar() {
+    try {
+      const [r1, r2, r3] = await Promise.all([
+        fetch('/api/recepcion/checkins-hoy').then(r => r.json()),
+        fetch('/api/recepcion/huespedes-activos').then(r => r.json()),
+        fetch('/api/admin/reservas').then(r => r.json())
+      ]);
+      datosCheckin        = r1.data || [];
+      datosActivos        = r2.data || [];
+      datosTodasReservas  = r3.data || [];
+
+      document.getElementById('statCheckinHoy').textContent = datosCheckin.length;
+      document.getElementById('statActivos').textContent    = datosActivos.length;
+      const checkoutsHoy = datosActivos.filter(r => {
+        return new Date(r.fecha_checkout).toDateString() === new Date().toDateString();
+      }).length;
+      document.getElementById('statCheckoutHoy').textContent = checkoutsHoy;
+
+      filtrar();
+    } catch(e) {
+      document.getElementById('cuerpoTabla').innerHTML = '<div style="padding:3rem;text-align:center;color:#e63232">Error de conexión</div>';
+    }
+  }
+
+  function irHuesped() {
+    const id = document.getElementById('inputReservaId').value.trim();
+    if (!id) { alert('Ingresa ID'); return; }
+    window.location.href = 'huesped.html?id=' + id;
+  }
+
+  function cerrarSesion() { sessionStorage.removeItem('usuario'); localStorage.removeItem('usuario'); window.location.href = '../login.html'; }
+  cargar();
+
+  // ── CALENDARIO AVANZADO PARA RESERVA MANUAL ──
+  (function () {
+    const MESES = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+    const DIAS_SEM = ['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'];
+    let mesBase = new Date(); mesBase.setDate(1);
+    let checkin = null, checkout = null, paso = 1, hoverDia = null;
+
+    const trigger = document.getElementById('triggerFechasManual');
+    const popup = document.getElementById('calPopupManual');
+    const grids = document.getElementById('calGridsManual');
+    const mesesEl = document.getElementById('calMesesManual');
+    const instruccion = document.getElementById('calInstruccionManual');
+    const labelCI = document.getElementById('labelCheckinManual');
+    const labelCO = document.getElementById('labelCheckoutManual');
+    const badge = document.getElementById('nochesBadgeManual');
+    const nochesNum = document.getElementById('nochesNumManual');
+    const inputCI = document.getElementById('mCheckin');
+    const inputCO = document.getElementById('mCheckout');
+
+    trigger.onclick = (e) => { e.stopPropagation(); popup.classList.toggle('visible'); trigger.classList.toggle('activo'); renderizar(); };
+    document.addEventListener('click', (e) => { if (!popup.contains(e.target) && !trigger.contains(e.target)) { popup.classList.remove('visible'); trigger.classList.remove('activo'); } });
+
+    document.getElementById('calPrevManual').onclick = (e) => { e.stopPropagation(); mesBase.setMonth(mesBase.getMonth() - 1); renderizar(); };
+    document.getElementById('calNextManual').onclick = (e) => { e.stopPropagation(); mesBase.setMonth(mesBase.getMonth() + 1); renderizar(); };
+    document.getElementById('calLimpiarManual').onclick = (e) => {
+      e.stopPropagation(); checkin = checkout = null; paso = 1; inputCI.value = inputCO.value = '';
+      labelCI.textContent = labelCO.textContent = 'Seleccionar'; badge.style.display = 'none'; renderizar();
+    };
+
+    function renderizar() {
+      const mes2 = new Date(mesBase); mes2.setMonth(mes2.getMonth() + 1);
+      mesesEl.innerHTML = `<span class="cal-mes-titulo">${MESES[mesBase.getMonth()]} ${mesBase.getFullYear()}</span><span class="cal-mes-titulo">${MESES[mes2.getMonth()]} ${mes2.getFullYear()}</span>`;
+      grids.innerHTML = ''; grids.appendChild(renderMes(mesBase)); grids.appendChild(renderMes(mes2));
+      instruccion.textContent = paso === 1 ? 'Selecciona llegada' : 'Selecciona salida';
+    }
+
+    function renderMes(fecha) {
+      const anio = fecha.getFullYear(), mes = fecha.getMonth(), hoy = new Date(); hoy.setHours(0,0,0,0);
+      const primerDia = new Date(anio, mes, 1), ultimoDia = new Date(anio, mes + 1, 0).getDate();
+      let offset = primerDia.getDay() - 1; if (offset < 0) offset = 6;
+      const grid = document.createElement('div'); grid.className = 'cal-grid';
+      const sem = document.createElement('div'); sem.className = 'cal-dias-semana';
+      DIAS_SEM.forEach(d => { const s = document.createElement('div'); s.className = 'cal-dia-sem'; s.textContent = d; sem.appendChild(s); });
+      grid.appendChild(sem);
+      const diasEl = document.createElement('div'); diasEl.className = 'cal-dias';
+      for (let i = 0; i < offset; i++) { const v = document.createElement('div'); v.className = 'cal-dia vacio'; diasEl.appendChild(v); }
+      for (let d = 1; d <= ultimoDia; d++) {
+        const fD = new Date(anio, mes, d); fD.setHours(0,0,0,0);
+        const celda = document.createElement('div'); celda.className = 'cal-dia'; celda.textContent = d;
+        if (fD < hoy) celda.classList.add('pasado');
+        else {
+          const inicio = checkin, fin = checkout || (paso === 2 && hoverDia ? hoverDia : null);
+          const esCI = inicio && fD.getTime() === inicio.getTime(), esCO = fin && fD.getTime() === fin.getTime();
+          if (esCI && esCO) celda.classList.add('seleccionado');
+          else if (esCI) celda.classList.add('rango-inicio');
+          else if (esCO) celda.classList.add('rango-fin');
+          else if (inicio && fin && fD > inicio && fD < fin) celda.classList.add('en-rango');
+          celda.onclick = (e) => { e.stopPropagation(); seleccionar(new Date(anio, mes, d)); };
+          celda.onmouseenter = () => { if (paso === 2 && checkin) { hoverDia = new Date(anio, mes, d); hoverDia.setHours(0,0,0,0); actualizarHover(); } };
+        }
+        diasEl.appendChild(celda);
+      }
+      grid.appendChild(diasEl); return grid;
+    }
+
+    function actualizarHover() {
+      const celdas = grids.querySelectorAll('.cal-dia:not(.vacio):not(.pasado)');
+      celdas.forEach(c => {
+        c.classList.remove('en-rango', 'rango-inicio', 'rango-fin', 'seleccionado');
+        const d = parseInt(c.textContent), g = c.closest('.cal-grid'), idx = Array.from(grids.querySelectorAll('.cal-grid')).indexOf(g);
+        const ref = new Date(mesBase); ref.setMonth(ref.getMonth() + idx);
+        const fC = new Date(ref.getFullYear(), ref.getMonth(), d); fC.setHours(0,0,0,0);
+        const inicio = checkin, fin = hoverDia > checkin ? hoverDia : null;
+        const esCI = fC.getTime() === inicio.getTime(), esCO = fin && fC.getTime() === fin.getTime();
+        if (esCI && esCO) c.classList.add('seleccionado');
+        else if (esCI) c.classList.add('rango-inicio');
+        else if (esCO) c.classList.add('rango-fin');
+        else if (fin && fC > inicio && fC < fin) c.classList.add('en-rango');
+      });
+    }
+
+    function seleccionar(f) {
+      if (paso === 1 || f <= checkin) {
+        checkin = f; checkout = null; paso = 2;
+        labelCI.textContent = f.toLocaleDateString('es-CO', { day: '2-digit', month: 'short' });
+        labelCO.textContent = 'Seleccionar'; badge.style.display = 'none';
+        inputCI.value = f.toISOString().split('T')[0]; inputCO.value = '';
+      } else {
+        checkout = f; paso = 1; hoverDia = null;
+        labelCO.textContent = f.toLocaleDateString('es-CO', { day: '2-digit', month: 'short' });
+        inputCO.value = f.toISOString().split('T')[0];
+        const n = Math.round((checkout - checkin) / (1000 * 60 * 60 * 24));
+        nochesNum.textContent = n; badge.style.display = 'flex';
+        setTimeout(() => { popup.classList.remove('visible'); trigger.classList.remove('activo'); }, 300);
+      }
+      renderizar();
+    }
+  })();
+</script>
+</body>
+</html>

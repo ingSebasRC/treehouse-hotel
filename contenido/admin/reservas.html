@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Reservas — Admin Treehouse1959</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet" />
+	
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <meta name="theme-color" content="#ffffff">
+	
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --verde-profundo: #1a3a2a;
+      --verde-musgo:    #2d5a3d;
+      --verde-selva:    #3d7a52;
+      --tierra:         #8b6242;
+      --arena:          #f0e8d8;
+      --crema:          #faf7f2;
+      --dorado:         #c9a84c;
+      --dorado-claro:   #e8c97a;
+      --blanco:         #ffffff;
+      --texto-oscuro:   #1c2b20;
+      --texto-medio:    #4a5e50;
+      --sidebar-w:      260px;
+      --apple-bg:       #f5f5f7;
+      --apple-card:     rgba(255, 255, 255, 0.8);
+      --apple-radius:   20px;
+    }
+    body { 
+      font-family: 'DM Sans', -apple-system, sans-serif; 
+      background: var(--apple-bg); 
+      color: var(--texto-oscuro); 
+      display: flex; 
+      min-height: 100vh;
+      letter-spacing: -0.01em;
+    }
+
+    /* ── SIDEBAR (Modern Apple Style - Dark Version) ── */
+    .sidebar {
+      width: var(--sidebar-w);
+      background: var(--verde-profundo);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      top: 0; left: 0; bottom: 0;
+      z-index: 50;
+    }
+    .sidebar-logo {
+      padding: 2.5rem 1.8rem 1.5rem;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .sidebar-logo h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      color: var(--blanco);
+      font-weight: 700;
+    }
+    .sidebar-logo h2 span { color: var(--dorado); font-style: italic; }
+    .sidebar-logo p { 
+      font-size: 0.65rem; 
+      color: rgba(255,255,255,0.4); 
+      text-transform: uppercase; 
+      letter-spacing: 0.15em; 
+      margin-top: 0.4rem;
+      font-weight: 600;
+    }
+
+    .sidebar-nav { flex: 1; padding: 1.5rem 0.8rem; }
+    .nav-seccion {
+      font-size: 0.7rem;
+      color: rgba(255,255,255,0.3);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      padding: 1.5rem 1rem 0.6rem;
+      font-weight: 700;
+    }
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      padding: 0.8rem 1rem;
+      color: rgba(255,255,255,0.7);
+      text-decoration: none;
+      font-size: 0.95rem;
+      font-weight: 500;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      border-radius: 12px;
+      margin-bottom: 0.2rem;
+    }
+    .nav-link:hover { background: rgba(255,255,255,0.05); color: var(--blanco); }
+    .nav-link.activo { 
+      background: var(--dorado); 
+      color: var(--verde-profundo);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+    .nav-link svg { width: 18px; height: 18px; transition: stroke 0.2s; }
+    .nav-link.activo svg { stroke: var(--verde-profundo); }
+
+    .sidebar-footer {
+      padding: 1.5rem;
+      border-top: 1px solid rgba(255,255,255,0.05);
+    }
+    .sidebar-usuario { font-size: 0.82rem; color: rgba(255,255,255,0.4); margin-bottom: 1rem; }
+    .sidebar-usuario strong { display: block; color: var(--blanco); font-size: 0.95rem; margin-bottom: 0.2rem; }
+    .btn-salir {
+      width: 100%;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: var(--blanco);
+      padding: 0.7rem;
+      border-radius: 12px;
+      font-family: inherit;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-salir:hover { background: rgba(200,0,0,0.05); color: #ff6b6b; border-color: rgba(200,0,0,0.1); }
+
+    /* ── MAIN CONTENT ── */
+    .main {
+      margin-left: var(--sidebar-w);
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    .topbar {
+      padding: 1.5rem 3rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky; top: 0;
+      z-index: 40;
+      background: rgba(245, 245, 247, 0.8);
+      backdrop-filter: blur(20px);
+    }
+    .topbar-titulo { font-size: 1.8rem; font-weight: 700; color: var(--texto-oscuro); letter-spacing: -0.02em; }
+    .topbar-fecha { font-size: 0.9rem; color: var(--texto-medio); font-weight: 500; }
+
+    .contenido { padding: 0 3rem 3rem; }
+
+    /* ── FILTROS ── */
+    .filtros {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .filtros input, .filtros select {
+      background: var(--blanco);
+      border: 1px solid rgba(0,0,0,0.08);
+      border-radius: 12px;
+      padding: 0.7rem 1.2rem;
+      font-family: inherit;
+      font-size: 0.9rem;
+      outline: none;
+      transition: all 0.2s;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+    }
+    .filtros input:focus {
+      border-color: var(--dorado);
+      box-shadow: 0 4px 12px rgba(201,168,76,0.1);
+    }
+
+    /* ── TABLA MODERNA ── */
+    .tabla-wrap {
+      background: var(--blanco);
+      border-radius: var(--apple-radius);
+      box-shadow: 0 4px 24px rgba(0,0,0,0.03);
+      border: 1px solid rgba(0,0,0,0.02);
+      overflow: hidden;
+    }
+    .tabla-header {
+      padding: 1.5rem 2rem;
+      border-bottom: 1px solid rgba(0,0,0,0.03);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .tabla-titulo { font-weight: 700; font-size: 1.1rem; color: var(--texto-oscuro); }
+    .contador-badge {
+      font-size: 0.8rem;
+      color: var(--texto-medio);
+      background: var(--apple-bg);
+      padding: 0.3rem 0.8rem;
+      border-radius: 20px;
+      font-weight: 600;
+    }
+
+    table { width: 100%; border-collapse: collapse; }
+    thead th { 
+      padding: 1rem 1.5rem; 
+      text-align: left; 
+      font-size: 0.72rem; 
+      font-weight: 700; 
+      color: var(--texto-medio); 
+      text-transform: uppercase; 
+      letter-spacing: 0.1em;
+      opacity: 0.6;
+    }
+    tbody tr { border-bottom: 1px solid rgba(0,0,0,0.03); transition: background 0.15s; }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: var(--apple-bg); }
+    tbody td { padding: 1.2rem 1.5rem; font-size: 0.92rem; color: var(--texto-oscuro); vertical-align: middle; }
+
+    .select-estado {
+      background: rgba(0,0,0,0.04);
+      border: none;
+      border-radius: 8px;
+      padding: 0.4rem 0.7rem;
+      font-family: inherit;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      outline: none;
+      transition: all 0.2s;
+    }
+    .select-estado:hover { background: rgba(0,0,0,0.08); }
+
+    .badge-pago {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    /* Iconos SVG */
+    svg { fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+    @media (max-width: 900px) { .main { margin-left: 0; } .sidebar { display: none; } .topbar, .contenido { padding: 1.5rem; } }
+  </style>
+</head>
+<body>
+
+<!-- Sidebar -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <h2>Treehouse<span>1959</span></h2>
+    <p>Control de Mando</p>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-seccion">Principal</div>
+    <a href="dashboard.html" class="nav-link">
+      <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+      Dashboard
+    </a>
+    <a href="reservas.html" class="nav-link activo">
+      <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+      Reservas
+    </a>
+
+    <div class="nav-seccion">Gestión</div>
+    <a href="habitaciones.html" class="nav-link">
+      <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 22"></polyline></svg>
+      Habitaciones
+    </a>
+    <a href="productos.html" class="nav-link">
+      <svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+      Productos
+    </a>
+    <a href="usuarios.html" class="nav-link">
+      <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+      Usuarios
+    </a>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="sidebar-usuario">
+      <strong id="sidebarNombre">Cargando...</strong>
+      Administrador
+    </div>
+    <button class="btn-salir" onclick="cerrarSesion()">Cerrar sesión</button>
+  </div>
+</aside>
+
+<div class="main">
+  <div class="topbar">
+    <span class="topbar-titulo">Listado de Reservas</span>
+    <span id="topbarFecha" style="font-size:0.9rem;color:var(--texto-medio);font-weight:500"></span>
+  </div>
+
+  <div class="contenido">
+    
+    <div class="filtros">
+      <input type="text" id="filtroBuscar" placeholder="🔍 Buscar por nombre, email o habitación..." oninput="filtrar()" style="flex:1" />
+      <select id="filtroEstado" onchange="filtrar()">
+        <option value="">Todos los estados</option>
+        <option value="pendiente">Pendiente</option>
+        <option value="confirmada">Confirmada</option>
+        <option value="cancelada">Cancelada</option>
+      </select>
+    </div>
+
+    <div class="tabla-wrap">
+      <div class="tabla-header">
+        <span class="tabla-titulo">Registro Maestro</span>
+        <span id="contadorReservas" class="contador-badge">0 registros</span>
+      </div>
+      <div id="cuerpoTabla" style="overflow-x:auto">
+        <div style="padding:4rem;text-align:center;opacity:0.5">⏳ Cargando datos del servidor...</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  const usuario = JSON.parse(sessionStorage.getItem('usuario') || 'null');
+  if (!usuario || usuario.rol !== 'admin') window.location.href = '../login.html';
+  else document.getElementById('sidebarNombre').textContent = usuario.nombre;
+
+  document.getElementById('topbarFecha').textContent = new Date().toLocaleDateString('es-CO', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+
+  let todasReservas = [];
+
+  function formatFecha(iso) {
+    if (!iso) return '—';
+    return new Date(iso).toLocaleDateString('es-CO', { day:'2-digit', month:'short', year:'numeric' });
+  }
+
+  function renderTabla(lista) {
+    document.getElementById('contadorReservas').textContent = lista.length + ' registro' + (lista.length !== 1 ? 's' : '');
+    if (lista.length === 0) {
+      document.getElementById('cuerpoTabla').innerHTML = `<div style="padding:4rem;text-align:center;opacity:0.4">No se encontraron resultados</div>`;
+      return;
+    }
+    document.getElementById('cuerpoTabla').innerHTML = `
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th><th>Huésped</th><th>Habitación</th>
+            <th>Check-in</th><th>Check-out</th><th>Noches</th><th>Pago</th><th>Estado</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${lista.map(r => `
+            <tr>
+              <td style="font-weight:700;color:var(--verde-musgo)">#${r.id}</td>
+              <td>
+                <div style="font-weight:700">${r.nombre} ${r.apellidos}</div>
+                <div style="font-size:0.75rem;opacity:0.6">${r.email}</div>
+              </td>
+              <td><span style="font-weight:600">${r.habitacion}</span></td>
+              <td>${formatFecha(r.fecha_checkin)}</td>
+              <td>${formatFecha(r.fecha_checkout)}</td>
+              <td style="text-align:center;font-weight:600">${r.num_noches}</td>
+              <td>
+                <span class="badge-pago">
+                  ${r.metodo_pago === 'prepago' ? '💳 <span style="font-size:0.7rem">PREPAGO</span>' : '🏨 <span style="font-size:0.7rem">HOTEL</span>'}
+                </span>
+              </td>
+              <td>
+                <select class="select-estado" onchange="cambiarEstado(${r.id}, this.value)">
+                  <option value="pendiente"  ${r.estado==='pendiente'  ? 'selected':''}>⏳ Pendiente</option>
+                  <option value="confirmada" ${r.estado==='confirmada' ? 'selected':''}>✅ Confirmada</option>
+                  <option value="cancelada"  ${r.estado==='cancelada'  ? 'selected':''}>❌ Cancelada</option>
+                </select>
+              </td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>`;
+  }
+
+  function filtrar() {
+    const texto  = document.getElementById('filtroBuscar').value.toLowerCase();
+    const estado = document.getElementById('filtroEstado').value;
+    const lista  = todasReservas.filter(r => {
+      const coincideTexto  = !texto  || (r.nombre + ' ' + r.apellidos + ' ' + r.email + ' ' + r.habitacion).toLowerCase().includes(texto);
+      const coincideEstado = !estado || r.estado === estado;
+      return coincideTexto && coincideEstado;
+    });
+    renderTabla(lista);
+  }
+
+  async function cambiarEstado(id, nuevoEstado) {
+    try {
+      await fetch('/api/admin/reservas/' + id + '/estado', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ estado: nuevoEstado })
+      });
+      const r = todasReservas.find(x => x.id === id);
+      if (r) r.estado = nuevoEstado;
+    } catch(e) { alert('Error al actualizar estado'); }
+  }
+
+  async function cargar() {
+    try {
+      const res  = await fetch('/api/admin/reservas');
+      const data = await res.json();
+      todasReservas = data.data || [];
+      filtrar();
+    } catch(e) {
+      document.getElementById('cuerpoTabla').innerHTML = '<div style="padding:3rem;text-align:center;color:#e63232">Error de conexión con el servidor</div>';
+    }
+  }
+
+  function cerrarSesion() { sessionStorage.removeItem('usuario'); localStorage.removeItem('usuario'); window.location.href = '../login.html'; }
+  cargar();
+</script>
+</body>
+</html>

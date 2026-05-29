@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Acceso — Treehouse1959</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <meta name="theme-color" content="#ffffff">
+	
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --verde-profundo: #1a3a2a;
+      --verde-musgo:    #2d5a3d;
+      --verde-selva:    #3d7a52;
+      --tierra:         #8b6242;
+      --arena:          #f0e8d8;
+      --crema:          #faf7f2;
+      --dorado:         #c9a84c;
+      --dorado-claro:   #e8c97a;
+      --blanco:         #ffffff;
+      --texto-oscuro:   #1c2b20;
+      --texto-medio:    #4a5e50;
+    }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--verde-profundo);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+    /* Fondo decorativo */
+    body::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse at 20% 50%, rgba(61,122,82,0.3) 0%, transparent 60%),
+        radial-gradient(ellipse at 80% 20%, rgba(201,168,76,0.1) 0%, transparent 50%);
+      pointer-events: none;
+    }
+
+    .login-card {
+      background: var(--blanco);
+      border-radius: 1.5rem;
+      width: 100%;
+      max-width: 420px;
+      padding: 2.8rem 2.5rem;
+      box-shadow: 0 24px 80px rgba(0,0,0,0.3);
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Logo */
+    .login-logo {
+      text-align: center;
+      margin-bottom: 0.4rem;
+    }
+    .login-logo-icon {
+      width: 52px; height: 52px;
+      background: var(--verde-profundo);
+      border-radius: 1rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      margin-bottom: 0.8rem;
+    }
+    .login-logo h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      color: var(--verde-profundo);
+    }
+    .login-logo h1 span { color: var(--tierra); font-style: italic; }
+    .login-logo p {
+      font-size: 0.78rem;
+      color: var(--texto-medio);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-top: 0.2rem;
+    }
+
+    .login-divider {
+      height: 1px;
+      background: var(--arena);
+      margin: 1.5rem 0;
+    }
+
+    .login-titulo {
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--verde-profundo);
+      margin-bottom: 1.4rem;
+    }
+
+    /* Campos */
+    .campo { display: flex; flex-direction: column; gap: 0.35rem; margin-bottom: 1rem; }
+    .campo label {
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: var(--verde-profundo);
+    }
+    .campo input {
+      border: 1.5px solid rgba(26,58,42,0.15);
+      border-radius: 0.6rem;
+      padding: 0.75rem 1rem;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.92rem;
+      color: var(--texto-oscuro);
+      background: var(--crema);
+      outline: none;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .campo input:focus {
+      border-color: var(--verde-selva);
+      background: var(--blanco);
+    }
+    .campo input.error { border-color: #e74c3c; }
+
+    /* Mensaje de error */
+    .login-error {
+      background: #fdf0f0;
+      border: 1px solid #f5c6cb;
+      color: #c0392b;
+      border-radius: 0.6rem;
+      padding: 0.7rem 1rem;
+      font-size: 0.83rem;
+      margin-bottom: 1rem;
+      display: none;
+    }
+    .login-error.visible { display: block; }
+
+    /* Botón */
+    .login-btn {
+      width: 100%;
+      background: var(--verde-profundo);
+      color: var(--blanco);
+      border: none;
+      padding: 0.85rem;
+      border-radius: 0.7rem;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.15s;
+      margin-top: 0.5rem;
+    }
+    .login-btn:hover { background: var(--verde-musgo); transform: translateY(-1px); }
+    .login-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+    .login-footer {
+      text-align: center;
+      margin-top: 1.5rem;
+      font-size: 0.78rem;
+      color: var(--texto-medio);
+    }
+    .login-footer a {
+      color: var(--verde-selva);
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .login-footer a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+
+<div class="login-card">
+  <div class="login-logo">
+    <div class="login-logo-icon">🌿</div>
+    <h1>Treehouse<span>1959</span></h1>
+    <p>Panel de gestión</p>
+  </div>
+
+  <div class="login-divider"></div>
+
+  <p class="login-titulo">Inicia sesión para continuar</p>
+
+  <div class="login-error" id="loginError"></div>
+
+  <div class="campo">
+    <label>Correo electrónico</label>
+    <input type="email" id="lEmail" placeholder="usuario@ejemplo.com" />
+  </div>
+  <div class="campo">
+    <label>Contraseña</label>
+    <input type="password" id="lPassword" placeholder="••••••••" />
+  </div>
+
+  <button class="login-btn" id="btnLogin">Ingresar</button>
+
+  <div class="login-footer">
+    <a href="index.html">← Volver al sitio web</a>
+  </div>
+</div>
+
+<script>
+  // Permitir Enter para enviar
+  document.getElementById('lPassword').addEventListener('keydown', e => {
+    if (e.key === 'Enter') document.getElementById('btnLogin').click();
+  });
+
+  document.getElementById('btnLogin').addEventListener('click', async () => {
+    const email    = document.getElementById('lEmail').value.trim();
+    const password = document.getElementById('lPassword').value;
+    const errorEl  = document.getElementById('loginError');
+    const btn      = document.getElementById('btnLogin');
+
+    errorEl.classList.remove('visible');
+
+    if (!email || !password) {
+      errorEl.textContent = 'Por favor ingresa tu correo y contraseña.';
+      errorEl.classList.add('visible');
+      return;
+    }
+
+    btn.disabled    = true;
+    btn.textContent = 'Verificando...';
+
+    try {
+      const res  = await fetch('/api/login', {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({ email, password })
+      });
+      const data = await res.json();
+
+      if (data.ok) {
+        // Guardar sesión en sessionStorage
+        const usuarioJSON = JSON.stringify(data.usuario);
+        sessionStorage.setItem('usuario', usuarioJSON);
+        localStorage.setItem('usuario', usuarioJSON);
+
+        // Redirigir según el rol
+        if (data.usuario.rol === 'admin') {
+          window.location.href = '/contenido/admin/dashboard.html';
+        } else {
+          window.location.href = '/contenido/recepcion/dashboard.html';
+        }      } else {
+        errorEl.textContent = data.mensaje || 'Credenciales incorrectas.';
+        errorEl.classList.add('visible');
+        btn.disabled    = false;
+        btn.textContent = 'Ingresar';
+      }
+
+    } catch (err) {
+      errorEl.textContent = '❌ No se pudo conectar con el servidor. ¿Está corriendo Node.js?';
+      errorEl.classList.add('visible');
+      btn.disabled    = false;
+      btn.textContent = 'Ingresar';
+    }
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Disponibilidad — Treehouse1959</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../estilos/style.css" />
+
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <meta name="theme-color" content="#ffffff">
+
+  <style>
+    /* ── Estilos propios de esta página ── */
+    body { background: var(--crema); }
+
+    /* Header compacto */
+    .disp-header {
+      background: var(--verde-profundo);
+      padding: 1.2rem 2.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .disp-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      color: var(--blanco);
+      text-decoration: none;
+    }
+    .disp-logo span { color: var(--dorado-claro); font-style: italic; }
+    .disp-volver {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: rgba(255,255,255,0.7);
+      text-decoration: none;
+      font-size: 0.85rem;
+      transition: color 0.2s;
+    }
+    .disp-volver:hover { color: var(--dorado-claro); }
+
+    /* Barra resumen de búsqueda */
+    .disp-resumen {
+      background: var(--verde-musgo);
+      padding: 1.2rem 2.5rem;
+    }
+    .disp-resumen-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+    .disp-resumen-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.15rem;
+    }
+    .disp-resumen-label {
+      font-size: 0.65rem;
+      color: rgba(255,255,255,0.5);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+    .disp-resumen-valor {
+      font-size: 0.95rem;
+      color: var(--blanco);
+      font-weight: 500;
+    }
+    .disp-resumen-sep {
+      width: 1px;
+      height: 32px;
+      background: rgba(255,255,255,0.15);
+    }
+    .disp-noches-pill {
+      background: rgba(201,168,76,0.25);
+      border: 1px solid rgba(201,168,76,0.4);
+      color: var(--dorado-claro);
+      font-size: 0.82rem;
+      font-weight: 500;
+      padding: 0.3rem 0.9rem;
+      border-radius: 2rem;
+      margin-left: auto;
+    }
+    .disp-modificar {
+      background: none;
+      border: 1.5px solid rgba(255,255,255,0.3);
+      color: rgba(255,255,255,0.8);
+      padding: 0.45rem 1.1rem;
+      border-radius: 2rem;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.82rem;
+      cursor: pointer;
+      text-decoration: none;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .disp-modificar:hover { border-color: var(--dorado-claro); color: var(--dorado-claro); }
+
+    /* Contenido principal */
+    .disp-main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 3rem 2.5rem;
+    }
+    .disp-titulo {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.6rem, 3vw, 2.2rem);
+      color: var(--verde-profundo);
+      margin-bottom: 0.5rem;
+    }
+    .disp-titulo em { font-style: italic; color: var(--tierra); }
+    .disp-subtitulo {
+      color: var(--texto-medio);
+      font-size: 0.92rem;
+      margin-bottom: 2.5rem;
+      font-weight: 300;
+    }
+
+    /* Grid de habitaciones */
+    .disp-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.8rem;
+    }
+
+    /* Card de habitación */
+    .disp-card {
+      background: var(--blanco);
+      border-radius: 1.2rem;
+      overflow: hidden;
+      box-shadow: 0 4px 24px rgba(26,58,42,0.08);
+      transition: transform 0.3s, box-shadow 0.3s;
+      display: flex;
+      flex-direction: column;
+    }
+    .disp-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 40px rgba(26,58,42,0.14);
+    }
+    .disp-card-img {
+      height: 210px;
+      overflow: hidden;
+      position: relative;
+    }
+    .disp-card-img img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s;
+    }
+    .disp-card:hover .disp-card-img img { transform: scale(1.06); }
+    .disp-card-tag {
+      position: absolute;
+      top: 1rem; right: 1rem;
+      background: var(--verde-profundo);
+      color: var(--dorado-claro);
+      font-size: 0.68rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.3rem 0.75rem;
+      border-radius: 2rem;
+    }
+    .disp-card-body {
+      padding: 1.5rem;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    .disp-card-nombre {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem;
+      color: var(--verde-profundo);
+      margin-bottom: 0.5rem;
+    }
+    .disp-card-desc {
+      color: var(--texto-medio);
+      font-size: 0.85rem;
+      line-height: 1.65;
+      font-weight: 300;
+      margin-bottom: 1.1rem;
+      flex: 1;
+    }
+    .disp-card-amenities {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-bottom: 1.3rem;
+    }
+    .disp-card-amenity {
+      background: var(--arena);
+      color: var(--texto-medio);
+      font-size: 0.72rem;
+      padding: 0.25rem 0.65rem;
+      border-radius: 2rem;
+    }
+    .disp-card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid rgba(26,58,42,0.08);
+      padding-top: 1.1rem;
+    }
+    .disp-card-precio-label {
+      font-size: 0.7rem;
+      color: var(--texto-medio);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .disp-card-disponible {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.78rem;
+      color: #2e7d32;
+      font-weight: 500;
+    }
+    .disp-card-disponible::before {
+      content: '';
+      width: 8px; height: 8px;
+      background: #4caf50;
+      border-radius: 50%;
+      display: inline-block;
+    }
+    .disp-btn-reservar {
+      background: var(--verde-profundo);
+      color: var(--blanco);
+      border: none;
+      padding: 0.65rem 1.4rem;
+      border-radius: 2rem;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.2s;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .disp-btn-reservar:hover {
+      background: var(--verde-musgo);
+      transform: translateY(-1px);
+    }
+
+    /* Estado vacío si no hay fechas */
+    .disp-sin-fechas {
+      text-align: center;
+      padding: 4rem 2rem;
+      color: var(--texto-medio);
+    }
+    .disp-sin-fechas .icono { font-size: 3rem; margin-bottom: 1rem; }
+    .disp-sin-fechas h3 { font-family: 'Playfair Display', serif; font-size: 1.4rem; color: var(--verde-profundo); margin-bottom: 0.5rem; }
+    .disp-sin-fechas p { font-size: 0.9rem; font-weight: 300; margin-bottom: 1.5rem; }
+
+    @media (max-width: 900px) {
+      .disp-grid { grid-template-columns: 1fr 1fr; }
+      .disp-main { padding: 2rem 1.5rem; }
+      .disp-header, .disp-resumen { padding: 1rem 1.5rem; }
+    }
+    @media (max-width: 580px) {
+      .disp-grid { grid-template-columns: 1fr; }
+      .disp-resumen-sep { display: none; }
+      .disp-noches-pill { margin-left: 0; }
+    }
+  </style>
+  <link rel="apple-touch-icon" sizes="180x180" href="/app-hotel/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/app-hotel/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/app-hotel/favicon-16x16.png">
+  <link rel="manifest" href="/app-hotel/site.webmanifest">
+  <link rel="shortcut icon" href="/app-hotel/favicon.ico">
+</head>
+<body>
+
+<!-- Header -->
+<header class="disp-header">
+  <a href="index.html" class="disp-logo">Treehouse<span>1959</span></a>
+  <a href="index.html" class="disp-volver">← Volver al inicio</a>
+</header>
+
+<!-- Barra resumen de búsqueda -->
+<div class="disp-resumen" id="barraResumen">
+  <div class="disp-resumen-inner" id="resumenInner">
+    <!-- Se rellena con JS -->
+  </div>
+</div>
+
+<!-- Contenido principal -->
+<main class="disp-main">
+  <div id="contenidoPrincipal">
+    <!-- Se rellena con JS -->
+  </div>
+</main>
+
+<script>
+  // ── Leer parámetros de la URL ──────────────
+  const params   = new URLSearchParams(window.location.search);
+  const checkin  = params.get('checkin');
+  const checkout = params.get('checkout');
+  const adultos  = params.get('adultos') || '2';
+  const ninos    = params.get('ninos')   || '0';
+
+  // ── Helpers ────────────────────────────────
+  function formatearBonito(isoStr) {
+    const MESES = ['Ene','Feb','Mar','Abr','May','Jun',
+                   'Jul','Ago','Sep','Oct','Nov','Dic'];
+    const d = new Date(isoStr + 'T12:00:00'); // evitar desfase de zona horaria
+    return d.getDate() + ' ' + MESES[d.getMonth()] + ' ' + d.getFullYear();
+  }
+  function calcNoches(ci, co) {
+    return Math.round((new Date(co) - new Date(ci)) / (1000 * 60 * 60 * 24));
+  }
+  function personasTexto() {
+    let txt = adultos + (adultos === '1' ? ' adulto' : ' adultos');
+    if (ninos !== '0') txt += ', ' + ninos + (ninos === '1' ? ' niño' : ' niños');
+    return txt;
+  }
+
+  // ── Render barra resumen ───────────────────
+  function renderResumen() {
+    const inner = document.getElementById('resumenInner');
+    if (!checkin || !checkout) {
+      inner.innerHTML = '<span style="color:rgba(255,255,255,0.6);font-size:0.9rem">Sin fechas seleccionadas</span>';
+      return;
+    }
+    const noches = calcNoches(checkin, checkout);
+    inner.innerHTML = `
+      <div class="disp-resumen-item">
+        <span class="disp-resumen-label">Check-in</span>
+        <span class="disp-resumen-valor">${formatearBonito(checkin)}</span>
+      </div>
+      <div class="disp-resumen-sep"></div>
+      <div class="disp-resumen-item">
+        <span class="disp-resumen-label">Check-out</span>
+        <span class="disp-resumen-valor">${formatearBonito(checkout)}</span>
+      </div>
+      <div class="disp-resumen-sep"></div>
+      <div class="disp-resumen-item">
+        <span class="disp-resumen-label">Huéspedes</span>
+        <span class="disp-resumen-valor">${personasTexto()}</span>
+      </div>
+      <span class="disp-noches-pill">🌙 ${noches} ${noches === 1 ? 'noche' : 'noches'}</span>
+      <a href="index.html#reservar" class="disp-modificar">Modificar búsqueda</a>
+    `;
+  }
+
+  // ── Render habitaciones ────────────────────
+  async function renderHabitaciones() {
+    const contenedor = document.getElementById('contenidoPrincipal');
+
+    if (!checkin || !checkout) {
+      contenedor.innerHTML = `
+        <div class="disp-sin-fechas">
+          <div class="icono">📅</div>
+          <h3>Selecciona tus fechas</h3>
+          <p>Necesitas elegir fecha de llegada y salida para ver disponibilidad.</p>
+          <a href="index.html#reservar" class="btn-primary">Seleccionar fechas</a>
+        </div>`;
+      return;
+    }
+
+    const noches = calcNoches(checkin, checkout);
+    const totalPersonas = parseInt(adultos) + parseInt(ninos);
+
+    // Mostrar cargando
+    contenedor.innerHTML = `
+      <h2 class="disp-titulo">Habitaciones <em>disponibles</em></h2>
+      <p class="disp-subtitulo">Buscando habitaciones...</p>
+      <div class="disp-grid" id="habGrid"><div style="grid-column:1/-1;text-align:center;padding:3rem;color:var(--texto-medio)">⏳ Cargando...</div></div>
+    `;
+
+    let habitaciones = [];
+    try {
+      const res = await fetch(`/api/habitaciones-disponibles?checkin=${checkin}&checkout=${checkout}`);
+      const data = await res.json();
+      habitaciones = data.data || [];
+    } catch(e) {
+      document.getElementById('habGrid').innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:3rem;color:#c0392b">❌ No se pudo conectar con el servidor.<br><small>¿Está corriendo Node.js?</small></div>`;
+      return;
+    }
+
+    // Separar activas e inactivas
+    const activas   = habitaciones.filter(h => h.activa);
+    const inactivas = habitaciones.filter(h => !h.activa);
+
+    // Actualizar subtítulo
+    contenedor.querySelector('.disp-subtitulo').textContent =
+      `${activas.length} habitación${activas.length !== 1 ? 'es' : ''} disponible${activas.length !== 1 ? 's' : ''} · ${formatearBonito(checkin)} → ${formatearBonito(checkout)}`;
+
+    // Función para amenidades basadas en tipo de cama
+    function amenidadesDe(h) {
+      const base = [`🛏 ${h.tipo_cama || 'Cama'}`, '❄️ A/C', '📺 TV LCD', '🧴 Amenidades'];
+      if (h.capacidad >= 4) base.push('👨‍👩‍👧 Familiar');
+      return base;
+    }
+
+    // Función precio a mostrar según personas
+    function precioTexto(h) {
+      if (totalPersonas <= 1 && h.precio_1p) return `$${Number(h.precio_1p).toLocaleString('es-CO')} / noche`;
+      if (h.precio_2p) return `$${Number(h.precio_2p).toLocaleString('es-CO')} / noche`;
+      return null;
+    }
+
+    // Función para obtener la imagen local según el nombre
+    function obtenerImagenLocal(nombre) {
+      const n = nombre.toLowerCase();
+      if (n.includes('doble') && !n.includes('semi')) return '../imagenes/habitaciones/Doble.jpeg';
+      if (n.includes('semidoble')) return '../imagenes/habitaciones/Semidoble.jpeg';
+      if (n.includes('especial'))  return '../imagenes/habitaciones/Queen-especial.jpeg';
+      if (n.includes('queen'))     return '../imagenes/habitaciones/Queen.jpeg';
+      if (n.includes('suite') || n.includes('delux')) return '../imagenes/habitaciones/Delux.jpeg';
+      if (n.includes('familiar'))  return '../imagenes/habitaciones/Familiar.jpeg';
+      return '../imagenes/habitaciones/Doble.jpeg'; // Fallback
+    }
+
+    // Render activas
+    const cardsActivas = activas.map(h => {
+      const precio = precioTexto(h);
+      const imgPath = obtenerImagenLocal(h.nombre);
+      return `
+        <div class="disp-card">
+          <div class="disp-card-img">
+            <img src="${imgPath}" alt="${h.nombre}" loading="lazy" />
+            <span class="disp-card-tag">${h.tag || 'Disponible'}</span>
+          </div>
+          <div class="disp-card-body">
+            <h3 class="disp-card-nombre">${h.nombre}</h3>
+            <p class="disp-card-desc">${h.descripcion || ''}</p>
+            <div class="disp-card-amenities">
+              ${amenidadesDe(h).map(a => `<span class="disp-card-amenity">${a}</span>`).join('')}
+            </div>
+            <div class="disp-card-footer">
+              <div>
+                ${precio ? `<div class="disp-card-precio-label">Precio por noche</div><div style="font-size:1rem;font-weight:600;color:var(--verde-profundo)">${precio}</div>` : ''}
+                <div class="disp-card-disponible">Disponible</div>
+              </div>
+              <a href="reserva.html?checkin=${checkin}&checkout=${checkout}&adultos=${adultos}&ninos=${ninos}&hab=${h.id}&nombre=${encodeURIComponent(h.nombre)}" class="disp-btn-reservar">+ Añadir</a>
+            </div>
+          </div>
+        </div>`;
+    }).join('');
+
+    // Render inactivas (bloqueadas, no se pueden reservar)
+    const cardsInactivas = inactivas.map(h => {
+      const imgPath = obtenerImagenLocal(h.nombre);
+      return `
+      <div class="disp-card" style="opacity:0.55;pointer-events:none;">
+        <div class="disp-card-img">
+          <img src="${imgPath}" alt="${h.nombre}" loading="lazy" style="filter:grayscale(60%)" />
+          <span class="disp-card-tag" style="background:#666;color:#fff">No disponible</span>
+        </div>
+        <div class="disp-card-body">
+          <h3 class="disp-card-nombre">${h.nombre}</h3>
+          <p class="disp-card-desc">${h.descripcion || ''}</p>
+          <div class="disp-card-footer">
+            <div>
+              <div style="display:flex;align-items:center;gap:0.4rem;font-size:0.78rem;color:#c0392b;font-weight:500">
+                <span style="width:8px;height:8px;background:#e74c3c;border-radius:50%;display:inline-block"></span>
+                No disponible por el momento
+              </div>
+            </div>
+            <span style="background:#ddd;color:#888;border:none;padding:0.65rem 1.4rem;border-radius:2rem;font-size:0.85rem;font-weight:500">No disponible</span>
+          </div>
+        </div>
+      </div>`;
+    }).join('');
+
+    document.getElementById('habGrid').innerHTML = cardsActivas + cardsInactivas;
+  }
+
+  // Ejecutar
+  renderResumen();
+  renderHabitaciones();
+</script>
+</body>
+</html>

@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Treehouse1959 Hotel — Villavicencio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <!-- Ruta al CSS según tu estructura de carpetas -->
+  <link rel="stylesheet" href="../estilos/style.css" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/app-hotel/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/app-hotel/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/app-hotel/favicon-16x16.png">
+  <link rel="manifest" href="/app-hotel/site.webmanifest">
+  <link rel="shortcut icon" href="/app-hotel/favicon.ico">
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <meta name="theme-color" content="#ffffff">
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a href="#inicio" class="nav-logo">Treehouse<span>1959</span></a>
+  <ul class="nav-links">
+    <li><a href="#nosotros">Nosotros</a></li>
+    <li><a href="#habitaciones">Habitaciones</a></li>
+    <li><a href="#servicios">Servicios</a></li>
+    <li><a href="#galeria">Galería</a></li>
+    <li><a href="#ubicacion">Ubicación</a></li>
+    <li><a href="#reservar" class="nav-cta">Reservar</a></li>
+    <li><a href="login.html" class="nav-acceso" title="Acceso personal">🔑</a></li>
+  </ul>
+  <button class="hamburger" id="hamburger" aria-label="Menú">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- MENÚ MÓVIL -->
+<div class="mobile-menu" id="mobileMenu">
+  <button class="mobile-menu-close" id="closeMenu">✕</button>
+  <a href="#nosotros"     class="mm-link">Nosotros</a>
+  <a href="#habitaciones" class="mm-link">Habitaciones</a>
+  <a href="#servicios"    class="mm-link">Servicios</a>
+  <a href="#galeria"      class="mm-link">Galería</a>
+  <a href="#ubicacion"    class="mm-link">Ubicación</a>
+  <a href="#reservar"     class="mm-link" style="color:var(--dorado-claro)">Reservar</a>
+</div>
+
+<!-- HERO -->
+<section class="hero" id="inicio">
+  <div class="hero-bg"></div>
+  <div class="hero-deco"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">⭐⭐⭐⭐ Hotel &nbsp;·&nbsp; Villavicencio, Colombia</div>
+    <h1 class="hero-title">
+      Donde la selva<br>se convierte en <em>hogar</em>
+    </h1>
+    <p class="hero-subtitle">
+      En el corazón de los Llanos Orientales, el Treehouse1959 te invita a vivir una experiencia única entre naturaleza, confort y la calidez llanera.
+    </p>
+    <div class="hero-actions">
+      <a href="#reservar" class="btn-primary">Reservar ahora</a>
+      <a href="#nosotros" class="btn-outline">Explorar el hotel</a>
+    </div>
+  </div>
+  <div class="scroll-hint">Scroll</div>
+</section>
+
+<!-- BOOKING BAR -->
+<div class="booking-bar" id="reservar">
+  <div class="booking-bar-inner">
+
+    <!-- Trigger que abre el calendario -->
+    <div class="booking-field booking-field--fechas" id="triggerFechas">
+      <div class="fecha-col">
+        <label>Check-in</label>
+        <span class="fecha-valor" id="labelCheckin">Seleccionar</span>
+      </div>
+      <div class="fecha-separador">→</div>
+      <div class="fecha-col">
+        <label>Check-out</label>
+        <span class="fecha-valor" id="labelCheckout">Seleccionar</span>
+      </div>
+      <!-- Badge de noches (visible solo cuando hay fechas) -->
+      <div class="noches-badge" id="nochesBadge" style="display:none">
+        <span id="nochesNum">0</span>
+        <span id="nochesTexto">noches</span>
+      </div>
+    </div>
+
+    <!-- Inputs ocultos para guardar los valores reales -->
+    <input type="hidden" id="checkin" />
+    <input type="hidden" id="checkout" />
+
+    <!-- Calendario flotante -->
+    <div class="cal-popup" id="calPopup">
+      <div class="cal-header">
+        <button class="cal-nav" id="calPrev">&#8249;</button>
+        <div class="cal-meses" id="calMeses"></div>
+        <button class="cal-nav" id="calNext">&#8250;</button>
+      </div>
+      <div class="cal-grids" id="calGrids"></div>
+      <div class="cal-footer">
+        <span class="cal-instruccion" id="calInstruccion">Selecciona la fecha de llegada</span>
+        <button class="cal-limpiar" id="calLimpiar">Limpiar</button>
+      </div>
+    </div>
+
+    <div class="booking-field">
+      <label>Adultos</label>
+      <select id="adultos">
+        <option value="1">1 adulto</option>
+        <option value="2" selected>2 adultos</option>
+        <option value="3">3 adultos</option>
+        <option value="4">4 adultos</option>
+      </select>
+    </div>
+    <div class="booking-field">
+      <label>Niños</label>
+      <select id="ninos">
+        <option value="0" selected>Sin niños</option>
+        <option value="1">1 niño</option>
+        <option value="2">2 niños</option>
+      </select>
+    </div>
+    <button class="booking-submit" id="btnConsultar">Consultar disponibilidad</button>
+  </div>
+</div>
+
+<!-- NOSOTROS -->
+<section class="about" id="nosotros">
+  <div class="about-inner">
+    <div class="about-text">
+      <div class="section-eyebrow">Nuestra historia</div>
+      <h2 class="section-title">Un refugio con <em>alma</em> desde 1959</h2>
+      <p>El Treehouse1959 es un hotel boutique de 4 estrellas ubicado en Villavicencio, Meta — la puerta de entrada a los Llanos Orientales de Colombia. Nacido de una pasión profunda por la naturaleza y la hospitalidad, cada rincón fue pensado para que te sientas parte del paisaje.</p>
+      <p>A pasos del Llanocentro y los principales atractivos de la ciudad, ofrecemos habitaciones con balcón privado, aire acondicionado y televisores de pantalla plana, todo rodeado de vegetación exuberante y el canto de los pájaros llaneros.</p>
+      <div class="about-stats">
+        <div class="stat">
+          <div class="stat-num">4★</div>
+          <div class="stat-label">Categoría oficial</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">65+</div>
+          <div class="stat-label">Años de historia</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">950m</div>
+          <div class="stat-label">Del Llanocentro</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">11km</div>
+          <div class="stat-label">Del aeropuerto</div>
+        </div>
+      </div>
+    </div>
+    <div class="about-images">
+      <div class="about-img">
+        <img src="../imagenes/instalaciones/arbol_hotel.jpeg" alt="Árbol icónico del hotel" loading="lazy" />
+        <span class="about-badge">Calle Ficticia 123, Villavicencio</span>
+      </div>
+      <div class="about-img">
+        <img src="../imagenes/instalaciones/frente_hotel.jpeg" alt="Fachada del hotel" loading="lazy" />
+      </div>
+      <div class="about-img">
+        <img src="../imagenes/instalaciones/segundo_piso.jpeg" alt="Vista interior" loading="lazy" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HABITACIONES -->
+<section class="rooms" id="habitaciones">
+  <div class="rooms-header">
+    <div>
+      <div class="section-eyebrow">Alojamiento</div>
+      <h2 class="section-title">Nuestras <em>habitaciones</em></h2>
+    </div>
+    <p class="rooms-intro">Cada habitación es un santuario. Balcón privado, aire acondicionado y la vista de los Llanos para comenzar el día con energía.</p>
+  </div>
+  <div class="rooms-grid">
+
+    <div class="room-card">
+      <div class="room-img">
+        <img src="../imagenes/habitaciones/Doble.jpeg" alt="Doble 1.40" loading="lazy" />
+        <span class="room-tag">Disponible</span>
+      </div>
+      <div class="room-body">
+        <h3 class="room-name">Doble 1.40</h3>
+        <p class="room-desc">Confort moderno con vistas al jardín. Ideal para parejas o viajeros de negocio que buscan calidad y tranquilidad.</p>
+        <div class="room-amenities">
+          <span class="amenity-tag">🛏 Cama doble</span>
+          <span class="amenity-tag">❄️ A/C</span>
+          <span class="amenity-tag">📺 TV LCD</span>
+          <span class="amenity-tag">🧴 Amenidades</span>
+        </div>
+        <div class="room-footer">
+          <div class="room-price">
+            <div class="room-price-num">Consultar</div>
+            <div class="room-price-label">por noche · 2 adultos</div>
+          </div>
+          <button class="room-book">Reservar</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="room-card">
+      <div class="room-img">
+        <img src="../imagenes/habitaciones/Queen.jpeg" alt="Queen 1.60" loading="lazy" />
+        <span class="room-tag">Popular</span>
+      </div>
+      <div class="room-body">
+        <h3 class="room-name">Queen 1.60</h3>
+        <p class="room-desc">Despierta con el amanecer llanero desde tu balcón privado. Canales satelitales, radio reloj y todas las comodidades.</p>
+        <div class="room-amenities">
+          <span class="amenity-tag">🛏 Cama Queen</span>
+          <span class="amenity-tag">🏡 Balcón</span>
+          <span class="amenity-tag">📡 Satélite</span>
+          <span class="amenity-tag">⏰ Radio reloj</span>
+        </div>
+        <div class="room-footer">
+          <div class="room-price">
+            <div class="room-price-num">Consultar</div>
+            <div class="room-price-label">por noche · 2 adultos</div>
+          </div>
+          <button class="room-book">Reservar</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="room-card">
+      <div class="room-img">
+        <img src="../imagenes/habitaciones/Delux.jpeg" alt="Delux 2x2" loading="lazy" />
+        <span class="room-tag">Premium</span>
+      </div>
+      <div class="room-body">
+        <h3 class="room-name">Delux 2x2</h3>
+        <p class="room-desc">Nuestra habitación más espaciosa. Área de estar, balcón amplio y toda la atmósfera del Treehouse para estadías especiales.</p>
+        <div class="room-amenities">
+          <span class="amenity-tag">🛏 Cama King</span>
+          <span class="amenity-tag">🏡 Balcón grande</span>
+          <span class="amenity-tag">🛁 Baño lujo</span>
+          <span class="amenity-tag">🛋 Sala estar</span>
+        </div>
+        <div class="room-footer">
+          <div class="room-price">
+            <div class="room-price-num">Consultar</div>
+            <div class="room-price-label">por noche · 2 adultos</div>
+          </div>
+          <button class="room-book">Reservar</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- SERVICIOS -->
+<section class="amenities" id="servicios">
+  <div class="amenities-inner">
+    <div class="section-eyebrow">Servicios</div>
+    <h2 class="section-title">Todo lo que <em>necesitas</em></h2>
+    <div class="amenities-grid">
+      <div class="amenity-card">
+        <div class="amenity-icon">🌿</div>
+        <h3 class="amenity-name">Entorno Natural</h3>
+        <p class="amenity-desc">Rodeado de vegetación típica de los Llanos Orientales. Respira aire puro a cada paso.</p>
+      </div>
+      <div class="amenity-card">
+        <div class="amenity-icon">❄️</div>
+        <h3 class="amenity-name">Climatización</h3>
+        <p class="amenity-desc">Aire acondicionado en todas las habitaciones para tu máximo confort bajo el calor llanero.</p>
+      </div>
+      <div class="amenity-card">
+        <div class="amenity-icon">📺</div>
+        <h3 class="amenity-name">Entretenimiento</h3>
+        <p class="amenity-desc">Televisores LCD con canales satelitales y radio reloj AM/FM en cada habitación.</p>
+      </div>
+      <div class="amenity-card">
+        <div class="amenity-icon">🧴</div>
+        <h3 class="amenity-name">Amenidades de Baño</h3>
+        <p class="amenity-desc">Artículos de baño de cortesía incluidos en todas las habitaciones del hotel.</p>
+      </div>
+      <div class="amenity-card">
+        <div class="amenity-icon">🍖</div>
+        <h3 class="amenity-name">Restaurante Cercano</h3>
+        <p class="amenity-desc">El Rodizio Brazon Brazileiro está a pasos del hotel. Gastronomía de primer nivel.</p>
+      </div>
+      <div class="amenity-card">
+        <div class="amenity-icon">🏙️</div>
+        <h3 class="amenity-name">Ubicación Central</h3>
+        <p class="amenity-desc">A 950 m del Llanocentro y cerca de los principales atractivos de Villavicencio.</p>
+      </div>
+      <div class="amenity-card">
+        <div class="amenity-icon">🏡</div>
+        <h3 class="amenity-name">Balcón Privado</h3>
+        <p class="amenity-desc">Disfruta de las mañanas y noches llaneras desde el balcón de tu habitación.</p>
+      </div>
+      <div class="amenity-card">
+        <div class="amenity-icon">✈️</div>
+        <h3 class="amenity-name">Cerca al Aeropuerto</h3>
+        <p class="amenity-desc">A solo 11 km del Aeropuerto de Villavicencio. Llegadas y salidas sin estrés.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GALERÍA -->
+<section class="gallery" id="galeria">
+  <div class="gallery-inner">
+    <div class="section-eyebrow">Galería</div>
+    <h2 class="section-title">Vive la <em>experiencia</em></h2>
+    <div class="gallery-grid">
+      <div class="gallery-item">
+        <img src="../imagenes/instalaciones/frente_hotel2.jpeg" alt="Hotel exterior" loading="lazy" />
+        <div class="gallery-overlay"><span>Vista general</span></div>
+      </div>
+      <div class="gallery-item">
+        <img src="../imagenes/instalaciones/hotel.jpeg" alt="Fachada principal" loading="lazy" />
+        <div class="gallery-overlay"><span>Exterior</span></div>
+      </div>
+      <div class="gallery-item">
+        <img src="../imagenes/instalaciones/sala_star.jpeg" alt="Zonas sociales" loading="lazy" />
+        <div class="gallery-overlay"><span>Zonas sociales</span></div>
+      </div>
+      <div class="gallery-item">
+        <img src="../imagenes/instalaciones/sillas_hotel.jpeg" alt="Área de descanso" loading="lazy" />
+        <div class="gallery-overlay"><span>Descanso</span></div>
+      </div>
+      <div class="gallery-item">
+        <img src="../imagenes/instalaciones/tercer_piso.jpeg" alt="Arquitectura interior" loading="lazy" />
+        <div class="gallery-overlay"><span>Arquitectura</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- POLÍTICAS -->
+<div class="policy">
+  <div class="policy-inner">
+    <div class="policy-item">
+      <div class="icon">🕒</div>
+      <h4>Check-in</h4>
+      <p>Desde las 3:00 PM<br>hasta las 10:00 PM</p>
+    </div>
+    <div class="policy-item">
+      <div class="icon">🔑</div>
+      <h4>Check-out</h4>
+      <p>Hasta las 12:00 PM<br>del día de salida</p>
+    </div>
+    <div class="policy-item">
+      <div class="icon">📋</div>
+      <h4>Licencia Oficial</h4>
+      <p>N.° 103162<br>Registro de turismo Colombia</p>
+    </div>
+  </div>
+</div>
+
+<!-- UBICACIÓN -->
+<section class="location" id="ubicacion">
+  <div class="location-inner">
+    <div>
+      <div class="section-eyebrow">Cómo llegarnos</div>
+      <h2 class="section-title">Nuestra <em>ubicación</em></h2>
+      <div style="margin-top:1.5rem">
+        <div class="location-detail">
+          <span class="icon">📍</span>
+          <span>Calle Ficticia 123, Villavicencio, Villavicencio, Meta, Colombia</span>
+        </div>
+        <div class="location-detail">
+          <span class="icon">✈️</span>
+          <span>Aeropuerto de Villavicencio: 11 km (≈10 min en carro)</span>
+        </div>
+        <div class="location-detail">
+          <span class="icon">🌿</span>
+          <span>Parque Del Hacha: 2 km</span>
+        </div>
+        <div class="location-detail">
+          <span class="icon">🏛</span>
+          <span>Parque De Los Fundadores: a 25 min caminando</span>
+        </div>
+      </div>
+      <div class="nearby-list">
+        <h3 style="font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--verde-profundo);margin-bottom:1rem;">Atracciones cercanas</h3>
+        <div class="nearby-item"><span>Llanocentro</span><span class="nearby-dist">950 m</span></div>
+        <div class="nearby-item"><span>Templo Villacodem</span><span class="nearby-dist">400 m</span></div>
+        <div class="nearby-item"><span>Primavera Urbana C.C.</span><span class="nearby-dist">600 m</span></div>
+        <div class="nearby-item"><span>CENTI Barzal</span><span class="nearby-dist">850 m</span></div>
+        <div class="nearby-item"><span>Templete Barzal</span><span class="nearby-dist">1,2 km</span></div>
+        <div class="nearby-item"><span>Parque Las Banderas</span><span class="nearby-dist">2,1 km</span></div>
+      </div>
+    </div>
+    <div class="location-map" style="background: #e8e8e8; display: flex; align-items: center; justify-content: center; min-height: 400px; border-radius: 1rem; color: #666; font-style: italic;">
+      <!-- Google Maps Embed Sanityzed for Portfolio -->
+      <p>Mapa de ubicación: Villavicencio, Meta, Colombia</p>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta">
+  <div class="cta-inner">
+    <div class="cta-content">
+      <h2>¿Listo para tu <em>escapada llanera</em>?</h2>
+      <p>Reserva directamente y vive una experiencia inolvidable en el corazón de los Llanos Orientales.</p>
+      <a href="#reservar" class="btn-primary">Reservar ahora</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <span class="footer-logo">Treehouse<span>1959</span></span>
+      <p class="footer-about">Hotel boutique 4 estrellas en Villavicencio, Meta. Un refugio entre la ciudad y la naturaleza llanera, donde cada detalle ha sido pensado para tu bienestar desde 1959.</p>
+      <div class="footer-stars">★★★★</div>
+    </div>
+    <div class="footer-col">
+      <h4>Hotel</h4>
+      <ul>
+        <li><a href="#nosotros">Nosotros</a></li>
+        <li><a href="#habitaciones">Habitaciones</a></li>
+        <li><a href="#servicios">Servicios</a></li>
+        <li><a href="#galeria">Galería</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Información</h4>
+      <ul>
+        <li><a href="#ubicacion">Cómo llegar</a></li>
+        <li><a href="#reservar">Reservas</a></li>
+        <li><a href="#">Política de privacidad</a></li>
+        <li><a href="#">Términos de uso</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Contacto</h4>
+      <ul>
+        <li><a href="#">Calle Ficticia 123</a></li>
+        <li><a href="#">Villavicencio, Meta</a></li>
+        <li><a href="#">Colombia</a></li>
+        <li><a href="#">Lic. N.° 000000</a></li>
+        <li style="color: rgba(255,255,255,0.5); font-size: 0.85rem; margin-top: 0.5rem;">+57 300 000 0000</li>
+        <li style="margin-top: 0.8rem; display: flex; gap: 1.2rem; align-items: center;">
+          <a href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer" title="Facebook" style="display: flex;">
+            <svg style="width:30px; height:30px; fill:currentColor;" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+          </a>
+          <a href="https://wa.me/573000000000" target="_blank" rel="noopener noreferrer" title="WhatsApp" style="display: flex;">
+            <svg style="width:30px; height:30px; fill:currentColor;" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 Treehouse1959 Hotel. Todos los derechos reservados.</span>
+    <a href="#">Política de privacidad</a>
+    <a href="login.html" style="color:rgba(255,255,255,0.3); font-size:0.75rem;">Acceso personal</a>
+  </div>
+</footer>
+
+<!-- Ruta al JS según tu estructura de carpetas -->
+<script src="../js/main.js"></script>
+</body>
+</html>
