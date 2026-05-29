@@ -1,228 +1,109 @@
-# Treehouse1959 Hotel — Sistema Web
-, Meta, Colombia. Desarro
-Sistema de reservas y gestión hotelera para el **Hotel Treehouse1959**, ubicado en Villavicenciollado como proyecto académico de 7mo semestre de Ingeniería Informática.
+# Treehouse 1959 Hotel — Sistema de Gestión Full Stack
+
+Sistema integral de reservas y gestión hotelera desarrollado para el **Hotel Treehouse 1959**, ubicado en Villavicencio, Meta, Colombia. Este es un proyecto real, robusto y escalable, diseñado para automatizar las operaciones diarias del hotel, desde la reserva pública hasta la facturación y el control de inventario.
 
 ---
 
-## Descripción
+## 🚀 Descripción
 
-Aplicación web completa que incluye:
-- Sitio web público para consulta y reserva de habitaciones
-- Panel de administración para gestión del hotel
-- Panel de recepción para manejo de huéspedes y facturación
+Aplicación web completa (Full Stack) que centraliza la operación hotelera en tres frentes:
+- **Sitio Web Público:** Interfaz elegante para huéspedes con sistema de reserva en tiempo real y generación automática de confirmación en PDF.
+- **Panel de Administración:** Control total sobre habitaciones, usuarios, inventario de productos y métricas del negocio.
+- **Panel de Recepción:** Gestión ágil de check-ins, consumos de huéspedes, estados de cuenta y facturación final.
 
 ---
 
-## Tecnologías utilizadas
+## 🛠️ Tecnologías
 
 | Capa | Tecnología |
 |------|------------|
-| Frontend | HTML5, CSS3, JavaScript (Vanilla) |
-| Backend | Node.js + Express |
-| Base de datos | MySQL (phpMyAdmin / XAMPP) |
-| Fuentes | Google Fonts (Playfair Display, DM Sans) |
+| **Frontend** | HTML5, CSS3, JavaScript (Vanilla), Responsive Design |
+| **Backend** | Node.js + Express.js |
+| **Seguridad** | Bcrypt (Hashing de contraseñas) |
+| **Documentación** | PDFKit (Generación dinámica de registros y facturas) |
+| **Base de Datos** | MySQL |
+| **Diseño** | Google Fonts, Estética Boutique |
 
 ---
 
-## Estructura del proyecto
+## 📁 Estructura del Proyecto
 
 ```
 TREEHOUSE-HOTEL/
-├── contenido/
-│   ├── index.html              # Página principal del hotel
-│   ├── disponibilidad.html     # Resultados de búsqueda
-│   ├── reserva.html            # Formulario de reserva
-│   ├── confirmacion.html       # Confirmación de reserva
-│   ├── login.html              # Acceso para personal
-│   ├── admin/
-│   │   ├── dashboard.html      # Panel principal admin
-│   │   ├── reservas.html       # Gestión de reservas
-│   │   ├── habitaciones.html   # Gestión de habitaciones
-│   │   ├── productos.html      # Inventario de productos
-│   │   └── usuarios.html       # Gestión de usuarios
-│   └── recepcion/
-│       ├── dashboard.html      # Panel de recepción
-│       ├── huesped.html        # Cuenta del huésped / consumos
-│       └── factura.html        # Generación de factura
-├── estilos/
-│   └── style.css               # Estilos globales
-├── js/
-│   ├── main.js                 # Lógica del frontend
-│   └── conexion.js             # Servidor Node.js + rutas API
-├── db_treehouse.sql            # Tablas principales
-├── db_roles.sql                # Tablas de roles y productos
-└── README.md
+├── contenido/              # Vistas HTML (Público, Admin y Recepción)
+│   ├── admin/              # Gestión administrativa
+│   ├── recepcion/          # Operación diaria y facturación
+│   ├── index.html          # Landing page principal
+│   └── ...                 # Flujo de reserva y disponibilidad
+├── estilos/                # Hojas de estilo CSS unificadas
+├── imagenes/               # Recursos visuales (Habitaciones e instalaciones)
+├── js/                     # Lógica frontend (Consumo de API)
+├── docs/                   # Documentos generados (PDFs)
+├── server.js               # Servidor principal (Node.js + API REST)
+├── db_hotel.sql            # Estructura principal de la base de datos
+├── db_roles.sql            # Configuración de roles, usuarios y productos
+└── package.json            # Dependencias y scripts
 ```
 
 ---
 
-## Requisitos previos
+## ⚙️ Instalación y Configuración
 
-- [Node.js](https://nodejs.org/) v14 o superior
-- [XAMPP](https://www.apachefriends.org/) (Apache + MySQL)
-- Navegador web moderno (Chrome, Edge, Firefox)
+### 1. Requisitos
+- [Node.js](https://nodejs.org/) (v14+)
+- [MySQL](https://www.mysql.com/) (XAMPP/WAMP recomendado para entorno local)
 
----
-
-## Instalación y configuración
-
-### 1. Clonar o descargar el proyecto
-
+### 2. Clonar el repositorio
 ```bash
 git clone https://github.com/tu-usuario/treehouse-hotel.git
+cd treehouse-hotel
 ```
 
-O descarga el ZIP desde GitHub y extráelo.
-
-### 2. Instalar dependencias de Node.js
-
-Abre la terminal en la carpeta del proyecto y ejecuta:
-
+### 3. Instalar dependencias
 ```bash
-npm install express mysql cors
+npm install
 ```
 
-### 3. Configurar la base de datos
+### 4. Base de Datos
+1. Crea una base de datos en MySQL llamada `db_treehouse`.
+2. Importa el archivo `db_hotel.sql`.
+3. Importa el archivo `db_roles.sql` para cargar la configuración inicial.
 
-1. Abre **XAMPP** y dale Start a **Apache** y **MySQL**
-2. Abre el navegador y ve a `http://localhost/phpmyadmin`
-3. Crea una base de datos llamada `db_treehouse`
-4. Selecciona `db_treehouse` → pestaña **SQL**
-5. Pega y ejecuta primero el contenido de `db_treehouse.sql`
-6. Luego pega y ejecuta el contenido de `db_roles.sql`
-
-### 4. Configurar variables de entorno
-
-Crea un archivo `.env` en la raíz del proyecto basado en `.env.example` y configura tus credenciales de base de datos:
-
+### 5. Variables de Entorno
+Configura el archivo `.env` en la raíz con tus credenciales:
 ```env
 DB_HOST=localhost
 DB_USER=root
-DB_PASS=tu_contraseña
+DB_PASS=tu_password
 DB_NAME=db_treehouse
 PORT=3000
 ```
 
-### 5. Arrancar el servidor
-
+### 6. Ejecutar el proyecto
 ```bash
-node js/conexion.js
+npm start
 ```
-
-Deberías ver:
-
-```
- Conexión exitosa a la base de datos db_treehouse
- Treehouse1959 — Servidor corriendo
-     http://localhost:3000
-```
-
-### 6. Abrir el proyecto
-
-Abre el navegador y ve a:
-
-```
-http://localhost:3000/contenido/index.html
-```
+El sistema estará disponible en `http://localhost:3000`.
 
 ---
 
-## Roles del sistema
+## 🔐 Seguridad y Funcionalidades Clave
 
-El sistema cuenta con dos roles para el personal del hotel:
-
-### Administrador
-- Acceso completo al panel de gestión
-- Gestionar reservas (ver, confirmar, cancelar)
-- Crear, editar y desactivar habitaciones
-- Gestionar inventario de productos
-- Administrar usuarios del sistema
-
-### Recepcionista
-- Ver reservas del día y huéspedes activos
-- Acceder a la cuenta de cualquier huésped
-- Cargar productos y servicios consumidos
-- Generar e imprimir factura final
-
-### Credenciales de prueba
-
-| Rol | Email | Contraseña |
-|-----|-------|------------|
-| Admin | admin@ejemplo.com | admin123 |
-| Recepcionista | recepcion@ejemplo.com | recepcion123 |
-
-> Cambiar estas contraseñas antes de poner el proyecto en producción.
+- **Protección de Datos:** Las contraseñas de los empleados están encriptadas mediante **Bcrypt**, garantizando la seguridad de las cuentas.
+- **Generación de Documentos:** Uso de **PDFKit** para emitir registros de huéspedes y facturas profesionales de manera automatizada.
+- **Gestión de Sesiones:** Sistema de login seguro con persistencia de roles (Admin/Recepción).
+- **Control de Inventario:** Descuento automático de stock al registrar consumos de huéspedes.
+- **Experiencia de Usuario:** Calendarios inteligentes, validación de disponibilidad y diseño adaptado a dispositivos móviles.
 
 ---
 
-## 🗄️ Base de datos
+## 👤 Autor
 
-### Tablas principales (`db_treehouse.sql`)
-
-| Tabla | Descripción |
-|-------|-------------|
-| `habitaciones` | Las habitaciones del hotel |
-| `huespedes` | Datos personales de cada huésped |
-| `reservas` | Reservas vinculadas a huéspedes y habitaciones |
-| `pagos` | Datos de pago (prepago / en hotel) |
-
-### Tablas de gestión (`db_roles.sql`)
-
-| Tabla | Descripción |
-|-------|-------------|
-| `usuarios` | Personal del hotel con rol y contraseña |
-| `productos` | Inventario de productos y servicios |
-| `consumos` | Productos cargados a la cuenta de un huésped |
-| `facturas` | Factura final generada al hacer checkout |
-
----
-
-## Rutas de la API
-
-| Método | Ruta | Descripción |
-|--------|------|-------------|
-| POST | `/api/login` | Autenticación de usuarios |
-| POST | `/api/reserva` | Crear nueva reserva |
-| GET | `/api/admin/dashboard` | Stats del dashboard admin |
-| GET | `/api/admin/reservas` | Listar todas las reservas |
-| PUT | `/api/admin/reservas/:id/estado` | Cambiar estado de reserva |
-| GET | `/api/admin/productos` | Listar productos |
-| POST | `/api/admin/productos` | Crear producto |
-| PUT | `/api/admin/productos/:id` | Editar producto |
-| DELETE | `/api/admin/productos/:id` | Desactivar producto |
-| GET | `/api/admin/habitaciones-todas` | Listar habitaciones |
-| POST | `/api/admin/habitaciones` | Crear habitación |
-| PUT | `/api/admin/habitaciones/:id` | Editar habitación |
-| GET | `/api/admin/usuarios` | Listar usuarios |
-| GET | `/api/recepcion/checkins-hoy` | Check-ins del día |
-| GET | `/api/recepcion/huespedes-activos` | Huéspedes en el hotel |
-| GET | `/api/recepcion/reserva/:id` | Detalle de una reserva |
-| GET | `/api/recepcion/productos` | Productos disponibles |
-| POST | `/api/recepcion/consumo` | Cargar consumo a huésped |
-| DELETE | `/api/recepcion/consumo/:id` | Quitar consumo |
-| POST | `/api/recepcion/factura` | Generar factura final |
-
----
-
-## Funcionalidades destacadas
-
-- **Calendario personalizado** con selección de rango de fechas y contador de noches
-- **Sistema de roles** con sesión persistente (sessionStorage + localStorage)
-- **Factura imprimible** — se oculta el sidebar al imprimir automáticamente
-- **Control de stock** — se descuenta automáticamente al cargar consumos
-- **Buscador en tiempo real** en todas las tablas del panel admin y recepción
-
----
-
-## Notas importantes
-
-- Este proyecto es de uso **académico / demostración**
-- Las contraseñas se guardan en texto plano — en producción usar **bcrypt**
-- Los datos de tarjeta solo guardan los **últimos 4 dígitos** por seguridad
-- Para producción real se recomienda integrar una pasarela de pago (PayU, Stripe)
+**Desarrollador Full Stack** — [Tu Nombre/Perfil]
+*Proyecto real implementado para Treehouse 1959 Hotel.*
 
 ---
 
 ## 📄 Licencia
 
-Proyecto académico — uso educativo.
+Este proyecto es propiedad privada. Todos los derechos reservados.
