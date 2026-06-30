@@ -99,7 +99,7 @@ El sistema estará disponible en `http://localhost:3000`.
 
 ## 👤 Autor
 
-**Desarrollador Full Stack** — [Sebastian Rodriguez Cárdenas]
+**Desarrollador Full Stack** — Sebastian Rodriguez Cárdenas
 *Proyecto real implementado para Treehouse 1959 Hotel.*
 
 ---
